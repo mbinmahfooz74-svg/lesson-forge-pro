@@ -7,3 +7,7 @@ dist/
 .DS_Store
 /generated/
 packages/db/generated/
+
+# unrelated projects living in this folder
+FlareSolverr/
+stremio-akwam/
