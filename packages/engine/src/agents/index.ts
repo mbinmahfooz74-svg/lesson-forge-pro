@@ -3,6 +3,8 @@ import type { AgentJobPayload, AgentName } from "@lessonforge/shared";
 import { AGENTS } from "@lessonforge/shared";
 import type { AgentResult } from "./types.js";
 import { runVerticalArchitect } from "./vertical-architect.js";
+import { runCurriculumPlanner } from "./curriculum-planner.js";
+import { runLessonDrafter } from "./lesson-drafter.js";
 
 export type { AgentResult } from "./types.js";
 
@@ -26,8 +28,8 @@ export const registry: Record<AgentName, AgentRun> = {
   ingestion: stub("ingestion"),
   "market-scout": stub("market-scout"),
   "briefing-writer": stub("briefing-writer"),
-  "curriculum-planner": stub("curriculum-planner"),
-  "lesson-drafter": stub("lesson-drafter"),
+  "curriculum-planner": runCurriculumPlanner,
+  "lesson-drafter": runLessonDrafter,
   "materials-generator": stub("materials-generator"),
   localizer: stub("localizer"),
   advisor: stub("advisor"),
