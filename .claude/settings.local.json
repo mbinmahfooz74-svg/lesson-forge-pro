@@ -59,7 +59,10 @@
       "Bash(npm run *)",
       "PowerShell(Get-Process -Name \"Docker Desktop\",\"com.docker.backend\",\"com.docker.build\",\"com.docker.dev-envs\" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 3; Get-ChildItem \"$env:LOCALAPPDATA\\\\Docker\\\\run\" -Force -ErrorAction SilentlyContinue | Select-Object Name)",
       "PowerShell(cmd /c \"del /f /q `\"$env:LOCALAPPDATA\\\\Docker\\\\run\\\\dockerInference`\" `\"$env:LOCALAPPDATA\\\\Docker\\\\run\\\\userAnalyticsOtlpHttp.sock`\"\" ; Get-ChildItem \"$env:LOCALAPPDATA\\\\Docker\\\\run\" -Force -ErrorAction SilentlyContinue | Measure-Object | Select-Object Count; Start-Process -FilePath \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe\"; \"restarted\")",
-      "PowerShell(Get-Process -Name \"Docker Desktop\",\"com.docker.backend\" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 3; Rename-Item \"$env:LOCALAPPDATA\\\\Docker\\\\run\" \"run_stale_$\\(Get-Random\\)\" -ErrorAction Stop; Start-Process -FilePath \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe\"; \"run dir renamed, Docker restarted\")"
+      "PowerShell(Get-Process -Name \"Docker Desktop\",\"com.docker.backend\" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 3; Rename-Item \"$env:LOCALAPPDATA\\\\Docker\\\\run\" \"run_stale_$\\(Get-Random\\)\" -ErrorAction Stop; Start-Process -FilePath \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe\"; \"run dir renamed, Docker restarted\")",
+      "Bash(gh auth *)",
+      "Bash(git remote *)",
+      "Bash(git push *)"
     ]
   }
 }

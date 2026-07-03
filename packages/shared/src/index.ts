@@ -26,7 +26,12 @@ export type AgentName = (typeof AGENTS)[number];
 export const QUEUES = {
   PING: "ping",
   AGENT_RUN: "agent.run",
+  SOURCE_INGEST: "source.ingest",
 } as const;
+
+export interface SourceIngestPayload {
+  sourceId: string;
+}
 
 export interface AgentJobPayload {
   agent: AgentName;

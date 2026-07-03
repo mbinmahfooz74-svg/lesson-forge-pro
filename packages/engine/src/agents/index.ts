@@ -1,38 +1,35 @@
 import { prisma } from "@lessonforge/db";
 import type { AgentJobPayload, AgentName } from "@lessonforge/shared";
 import { AGENTS } from "@lessonforge/shared";
+import type { AgentResult } from "./types.js";
+import { runVerticalArchitect } from "./vertical-architect.js";
 
-export interface AgentResult {
-  ok: boolean;
-  summary: string;
-}
+export type { AgentResult } from "./types.js";
 
 type AgentRun = (payload: AgentJobPayload) => Promise<AgentResult>;
 
-/**
- * Sprint 0 stubs. Each agent gets a real implementation in its sprint:
- *   ingestion → S1, vertical-architect → S2, curriculum-planner/lesson-drafter → S3,
- *   materials-generator/localizer → S4, market-scout/briefing-writer/advisor → S5,
- *   feedback-analyzer → S6.
- */
+/** Stubs for agents whose sprint hasn't landed yet — they log an event and no-op. */
 const stub =
   (name: AgentName): AgentRun =>
   async (payload) => {
-    const summary = `${name}: stub executed (implementation arrives in its sprint)`;
     await prisma.event.create({
       data: {
-        tenantId: payload.tenantId,
         type: `agent.${name}.ran`,
-        payload: { stub: true, input: payload.input ?? null, verticalId: payload.verticalId ?? null },
+        payload: { stub: true, verticalId: payload.verticalId ?? null },
       },
     });
-    return { ok: true, summary };
+    return { ok: true, summary: `${name}: stub executed (implementation arrives in its sprint)` };
   };
 
-export const registry: Record<AgentName, AgentRun> = Object.fromEntries(
-  AGENTS.map((name) => [name, stub(name)])
-) as Record<AgentName, AgentRun>;
-
-export function requireAnthropicKey(): string | null {
-  return process.env.ANTHROPIC_API_KEY || null;
-}
+export const registry: Record<AgentName, AgentRun> = {
+  "vertical-architect": runVerticalArchitect,
+  ingestion: stub("ingestion"),
+  "market-scout": stub("market-scout"),
+  "briefing-writer": stub("briefing-writer"),
+  "curriculum-planner": stub("curriculum-planner"),
+  "lesson-drafter": stub("lesson-drafter"),
+  "materials-generator": stub("materials-generator"),
+  localizer: stub("localizer"),
+  advisor: stub("advisor"),
+  "feedback-analyzer": stub("feedback-analyzer"),
+};

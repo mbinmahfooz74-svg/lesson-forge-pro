@@ -5,6 +5,10 @@ import { prisma } from "@lessonforge/db";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
+  trustHost: true,
+  // Local dev runs over plain http; a proxy sending x-forwarded-proto:https would
+  // otherwise make the session cookie Secure and the browser would drop it.
+  useSecureCookies: process.env.NODE_ENV === "production",
   pages: { signIn: "/en/login" },
   providers: [
     Credentials({

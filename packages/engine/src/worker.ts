@@ -1,13 +1,26 @@
-import { QUEUES, type AgentJobPayload } from "@lessonforge/shared";
+import { QUEUES, type AgentJobPayload, type SourceIngestPayload } from "@lessonforge/shared";
 import { prisma } from "@lessonforge/db";
 import { getBoss } from "./queue.js";
 import { registry } from "./agents/index.js";
+import { ingestSource } from "./ingestion/ingest.js";
 
 async function main() {
   const boss = await getBoss();
 
   await boss.createQueue(QUEUES.PING);
   await boss.createQueue(QUEUES.AGENT_RUN);
+  await boss.createQueue(QUEUES.SOURCE_INGEST);
+
+  await boss.work(QUEUES.SOURCE_INGEST, async ([job]) => {
+    const { sourceId } = job.data as unknown as SourceIngestPayload;
+    console.log(`[worker] ingesting source ${sourceId}`);
+    const result = await ingestSource(sourceId);
+    console.log(
+      result.ok
+        ? `[worker] indexed ${sourceId} (quality ${result.quality}, flags: ${result.flags?.join(",") || "none"})`
+        : `[worker] FAILED ${sourceId}: ${result.error}`
+    );
+  });
 
   await boss.work(QUEUES.PING, async ([job]) => {
     console.log(`[worker] ping received (job ${job.id})`);

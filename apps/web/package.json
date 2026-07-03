@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@lessonforge/db": "*",
+    "@lessonforge/engine": "*",
     "@lessonforge/shared": "*",
     "bcryptjs": "^3.0.2",
     "next": "^15.3.4",
