@@ -11,3 +11,7 @@ packages/db/generated/
 # unrelated projects living in this folder
 FlareSolverr/
 stremio-akwam/
+
+# generated material packs
+storage/
+packages/engine/storage/

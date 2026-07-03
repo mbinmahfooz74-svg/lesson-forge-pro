@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@lessonforge/db", "@lessonforge/shared", "@lessonforge/engine"],
-  serverExternalPackages: ["@prisma/client", "bcryptjs", "pg-boss"],
+  serverExternalPackages: ["@prisma/client", "bcryptjs", "pg-boss", "pptxgenjs", "pdfkit", "docx"],
   webpack: (config) => {
     // Workspace packages are TS source using ESM `.js` import specifiers; let webpack
     // resolve `./x.js` to `./x.ts` so they can be imported by the app.

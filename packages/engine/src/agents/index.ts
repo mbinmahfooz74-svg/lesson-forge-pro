@@ -5,6 +5,8 @@ import type { AgentResult } from "./types.js";
 import { runVerticalArchitect } from "./vertical-architect.js";
 import { runCurriculumPlanner } from "./curriculum-planner.js";
 import { runLessonDrafter } from "./lesson-drafter.js";
+import { runMaterialsGenerator } from "./materials-generator.js";
+import { runLocalizer } from "./localizer.js";
 
 export type { AgentResult } from "./types.js";
 
@@ -30,8 +32,8 @@ export const registry: Record<AgentName, AgentRun> = {
   "briefing-writer": stub("briefing-writer"),
   "curriculum-planner": runCurriculumPlanner,
   "lesson-drafter": runLessonDrafter,
-  "materials-generator": stub("materials-generator"),
-  localizer: stub("localizer"),
+  "materials-generator": runMaterialsGenerator,
+  localizer: runLocalizer,
   advisor: stub("advisor"),
   "feedback-analyzer": stub("feedback-analyzer"),
 };

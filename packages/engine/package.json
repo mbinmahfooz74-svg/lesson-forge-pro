@@ -18,11 +18,13 @@
     "docx": "^9.5.1",
     "jsdom": "^25.0.1",
     "pdf-parse": "^1.1.1",
+    "pdfkit": "^0.15.1",
     "pg-boss": "^10.1.5",
     "pptxgenjs": "^3.12.0"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
+    "@types/pdfkit": "^0.13.9",
     "tsx": "^4.19.2"
   }
 }
