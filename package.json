@@ -1,0 +1,22 @@
+{
+  "name": "lesson-forge-pro",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Autonomous education-intelligence platform — self-building verticals, weekly market briefings, bilingual training material.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "dev:worker": "npm run dev --workspace=packages/engine",
+    "build": "npm run build --workspace=apps/web",
+    "db:up": "docker compose up -d db",
+    "db:push": "npm run db:push --workspace=packages/db",
+    "db:seed": "npm run seed --workspace=packages/db",
+    "typecheck": "tsc -b apps/web packages/db packages/engine packages/shared --noEmit || npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

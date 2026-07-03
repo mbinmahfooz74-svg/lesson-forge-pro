@@ -1,0 +1,16 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: lessonforge-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: forge
+      POSTGRES_PASSWORD: forge_dev_pw
+      POSTGRES_DB: lessonforge
+    ports:
+      - "5433:5432"
+    volumes:
+      - lessonforge_pgdata:/var/lib/postgresql/data
+
+volumes:
+  lessonforge_pgdata:
