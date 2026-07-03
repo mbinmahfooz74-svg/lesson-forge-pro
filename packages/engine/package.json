@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "tsx watch src/worker.ts",
     "start": "tsx src/worker.ts",
-    "ping": "tsx src/send-ping.ts"
+    "ping": "tsx src/send-ping.ts",
+    "agent": "tsx src/run-agent.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
