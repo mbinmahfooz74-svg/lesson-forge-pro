@@ -3,8 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@lessonforge/db";
 import { enqueueAgentRun } from "@lessonforge/engine";
+import { requireOwner } from "@/lib/authz";
 
 export async function submitFeedback(formData: FormData) {
+  await requireOwner();
   const verticalId = String(formData.get("verticalId") ?? "");
   const transcript = String(formData.get("transcript") ?? "").trim();
   const ratings = String(formData.get("ratings") ?? "").trim();

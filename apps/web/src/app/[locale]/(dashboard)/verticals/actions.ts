@@ -3,12 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@lessonforge/db";
 import { enqueueAgentRun } from "@lessonforge/engine";
+import { requireOwner } from "@/lib/authz";
 
 function slugify(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "vertical";
 }
 
 export async function createVertical(formData: FormData) {
+  await requireOwner();
   const nameEn = String(formData.get("nameEn") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const locale = String(formData.get("locale") ?? "en");
@@ -28,6 +30,7 @@ export async function createVertical(formData: FormData) {
 }
 
 export async function buildVertical(formData: FormData) {
+  await requireOwner();
   const verticalId = String(formData.get("verticalId") ?? "");
   const locale = String(formData.get("locale") ?? "en");
   const v = await prisma.vertical.findUnique({ where: { id: verticalId } });

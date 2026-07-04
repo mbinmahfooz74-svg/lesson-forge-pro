@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: forge
+          POSTGRES_PASSWORD: forge_dev_pw
+          POSTGRES_DB: lessonforge
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U forge -d lessonforge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://forge:forge_dev_pw@localhost:5433/lessonforge
+      AUTH_SECRET: ci-only-secret
+      AUTH_TRUST_HOST: "true"
+      OWNER_EMAIL: ci@example.com
+      OWNER_PASSWORD: ci-password
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run generate --workspace=packages/db
+      - run: npm run db:push --workspace=packages/db
+      - run: npm run seed --workspace=packages/db
+      - name: Unit tests
+        run: npm test --workspace=packages/engine
+      - name: Golden-set evals
+        run: npm run eval --workspace=packages/engine
+      - name: Production build
+        run: npm run build --workspace=apps/web

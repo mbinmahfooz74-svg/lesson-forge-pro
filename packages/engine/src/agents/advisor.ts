@@ -2,6 +2,7 @@ import { prisma } from "@lessonforge/db";
 import type { AgentJobPayload } from "@lessonforge/shared";
 import { generateText } from "../llm.js";
 import { recordUsage } from "../usage.js";
+import { sendEmail } from "../email.js";
 import type { AgentResult } from "./types.js";
 
 /**
@@ -41,7 +42,21 @@ export async function runAdvisor(_payload: AgentJobPayload): Promise<AgentResult
   );
 
   await recordUsage(null, "advisor", inputTokens, outputTokens);
-  await prisma.event.create({ data: { type: "advisory.weekly", payload: { advisory, verticals: verticals.length, estCostUsd: Number(estCost.toFixed(2)), usedLLM } } });
 
-  return { ok: true, summary: `advisor: weekly advisory across ${verticals.length} verticals (est $${estCost.toFixed(2)})${usedLLM ? "" : " [fallback]"}` };
+  const owner = await prisma.user.findFirst({ where: { role: "OWNER" } });
+  const email = owner
+    ? await sendEmail({ to: owner.email, subject: `Lesson Forge — weekly advisory (${new Date().toISOString().slice(0, 10)})`, text: advisory })
+    : { sent: false, detail: "no owner user" };
+
+  await prisma.event.create({
+    data: {
+      type: "advisory.weekly",
+      payload: { advisory, verticals: verticals.length, estCostUsd: Number(estCost.toFixed(2)), usedLLM, emailed: email.sent, emailDetail: email.detail },
+    },
+  });
+
+  return {
+    ok: true,
+    summary: `advisor: weekly advisory across ${verticals.length} verticals (est $${estCost.toFixed(2)})${email.sent ? ", emailed" : ""}${usedLLM ? "" : " [fallback]"}`,
+  };
 }

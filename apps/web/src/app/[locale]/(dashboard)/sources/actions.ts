@@ -3,8 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@lessonforge/db";
 import { classifyUrl, enqueueSourceIngest } from "@lessonforge/engine";
+import { requireOwner } from "@/lib/authz";
 
 export async function addSource(formData: FormData) {
+  await requireOwner();
   const url = String(formData.get("url") ?? "").trim();
   const verticalId = String(formData.get("verticalId") ?? "");
   const locale = String(formData.get("locale") ?? "en");
@@ -19,6 +21,7 @@ export async function addSource(formData: FormData) {
 }
 
 export async function retrySource(formData: FormData) {
+  await requireOwner();
   const sourceId = String(formData.get("sourceId") ?? "");
   const locale = String(formData.get("locale") ?? "en");
   if (!sourceId) return;

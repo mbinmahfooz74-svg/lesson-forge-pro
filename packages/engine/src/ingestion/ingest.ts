@@ -1,7 +1,7 @@
 import { prisma } from "@lessonforge/db";
 import { extract, ExtractionError } from "./extractors/index.js";
 import { scoreQuality, chunk } from "./quality.js";
-import { embed, toVectorLiteral } from "./embed.js";
+import { embedMany, toVectorLiteral, activeProvider } from "./embed.js";
 
 export interface IngestResult {
   ok: boolean;
@@ -51,14 +51,16 @@ export async function ingestSource(sourceId: string): Promise<IngestResult> {
           quality: quality.score,
           flags: quality.flags,
           chunks: chunks.length,
+          embedProvider: activeProvider(),
           ...extraction.meta,
         },
       },
     });
 
     // Store embeddings per chunk via raw SQL (Prisma has no vector type binding).
+    const vectors = await embedMany(chunks);
     for (let i = 0; i < chunks.length; i++) {
-      const vec = toVectorLiteral(embed(chunks[i]));
+      const vec = toVectorLiteral(vectors[i]);
       await prisma.$executeRawUnsafe(
         `INSERT INTO "Document" (id, "verticalId", "sourceId", title, lang, version, content, meta, embedding, "createdAt")
          VALUES (gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7::jsonb, $8::vector, now())`,

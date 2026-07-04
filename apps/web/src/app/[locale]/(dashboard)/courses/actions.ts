@@ -3,8 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@lessonforge/db";
 import { enqueueAgentRun } from "@lessonforge/engine";
+import { requireOwner } from "@/lib/authz";
 
 export async function planCourse(formData: FormData) {
+  await requireOwner();
   const verticalId = String(formData.get("verticalId") ?? "");
   const title = String(formData.get("title") ?? "").trim();
   const locale = String(formData.get("locale") ?? "en");
@@ -15,6 +17,7 @@ export async function planCourse(formData: FormData) {
 }
 
 export async function draftSession(formData: FormData) {
+  await requireOwner();
   const sessionId = String(formData.get("sessionId") ?? "");
   const locale = String(formData.get("locale") ?? "en");
   const s = await prisma.courseSession.findUnique({ where: { id: sessionId }, include: { course: { include: { vertical: true } } } });
@@ -29,6 +32,7 @@ export async function draftSession(formData: FormData) {
 }
 
 export async function generateMaterials(formData: FormData) {
+  await requireOwner();
   const sessionId = String(formData.get("sessionId") ?? "");
   const locale = String(formData.get("locale") ?? "en");
   const s = await prisma.courseSession.findUnique({ where: { id: sessionId }, include: { course: { include: { vertical: true } } } });

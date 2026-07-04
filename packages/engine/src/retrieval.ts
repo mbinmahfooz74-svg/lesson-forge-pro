@@ -1,5 +1,5 @@
 import { prisma } from "@lessonforge/db";
-import { embed, toVectorLiteral } from "./ingestion/embed.js";
+import { embedOne, toVectorLiteral } from "./ingestion/embed.js";
 
 export interface Retrieved {
   title: string;
@@ -12,7 +12,7 @@ export interface Retrieved {
  * Returns the top-k most relevant chunks to ground curriculum/lesson generation.
  */
 export async function retrieve(verticalId: string, query: string, k = 6): Promise<Retrieved[]> {
-  const vec = toVectorLiteral(embed(query));
+  const vec = toVectorLiteral(await embedOne(query));
   const rows = await prisma.$queryRawUnsafe<{ title: string; content: string; distance: number }[]>(
     `SELECT title, content, (embedding <=> $1::vector) AS distance
      FROM "Document"

@@ -15,3 +15,6 @@ stremio-akwam/
 # generated material packs
 storage/
 packages/engine/storage/
+
+# database backups
+backups/
