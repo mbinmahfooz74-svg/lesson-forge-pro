@@ -12,11 +12,24 @@ const MIME: Record<string, string> = {
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const u = session?.user as { role?: string; tenantId?: string } | undefined;
+  if (!session?.user || !u?.tenantId) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const pack = await prisma.materialPack.findUnique({ where: { id } });
+  const pack = await prisma.materialPack.findUnique({
+    where: { id },
+    include: {
+      session: { include: { course: { include: { vertical: true } } } },
+      briefing: { include: { vertical: true } },
+    },
+  });
   if (!pack) return NextResponse.json({ error: "not found" }, { status: 404 });
+
+  // Tenant isolation: packs are only downloadable inside their own workspace.
+  const packTenant = pack.session?.course.vertical.tenantId ?? pack.briefing?.vertical.tenantId ?? null;
+  if (u.role !== "OWNER" && packTenant !== u.tenantId) {
+    return NextResponse.json({ error: "not found" }, { status: 404 });
+  }
 
   try {
     const data = await fs.readFile(pack.storagePath);

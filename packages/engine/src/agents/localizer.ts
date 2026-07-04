@@ -15,9 +15,13 @@ import type { AgentResult } from "./types.js";
 export async function runLocalizer(payload: AgentJobPayload): Promise<AgentResult> {
   const sessionId = payload.input?.sessionId as string | undefined;
   if (!sessionId) return { ok: false, summary: "localizer: no sessionId" };
-  const session = await prisma.courseSession.findUnique({ where: { id: sessionId }, include: { course: { include: { vertical: true } } } });
+  const session = await prisma.courseSession.findUnique({
+    where: { id: sessionId },
+    include: { course: { include: { vertical: { include: { tenant: true } } } } },
+  });
   if (!session) return { ok: false, summary: "localizer: session not found" };
   const vertical = session.course.vertical;
+  const brand = { name: vertical.tenant.brandName || vertical.tenant.name, accent: vertical.tenant.accentColor };
   const disclaimer = vertical.slug === "investment" ? INVESTMENT_DISCLAIMER_AR : undefined;
   const source = session.guideMd || session.planMd;
 
@@ -50,7 +54,8 @@ export async function runLocalizer(payload: AgentJobPayload): Promise<AgentResul
     titleAr || `${session.titleEn} — عربي`,
     [{ heading: "الدليل", body: arabic }],
     true,
-    disclaimer
+    disclaimer,
+    brand
   );
   const packId = await savePack({ sessionId, kind: "DOCX", lang: "ar-handout", ext: "docx", data: doc });
 

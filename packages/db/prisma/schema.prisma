@@ -17,14 +17,38 @@ enum TenantType {
   B2B
 }
 
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+}
+
 model Tenant {
-  id        String     @id @default(cuid())
-  type      TenantType @default(B2B)
-  name      String
-  createdAt DateTime   @default(now())
-  users     User[]
-  verticals Vertical[]
-  events    Event[]
+  id          String       @id @default(cuid())
+  type        TenantType   @default(B2B)
+  status      TenantStatus @default(ACTIVE)
+  name        String
+  brandName   String       @default("")
+  accentColor String       @default("B45309")
+  seatLimit   Int          @default(5)
+  createdAt   DateTime     @default(now())
+  users       User[]
+  verticals   Vertical[]
+  events      Event[]
+  invites     Invite[]
+}
+
+model Invite {
+  id         String    @id @default(cuid())
+  tenantId   String
+  tenant     Tenant    @relation(fields: [tenantId], references: [id])
+  email      String
+  role       UserRole  @default(TENANT_MEMBER)
+  token      String    @unique
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([tenantId])
 }
 
 enum UserRole {

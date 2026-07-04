@@ -1,5 +1,6 @@
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
+import { getSessionInfo, tenantWhere } from "@/lib/authz";
 import { approveProposal, rejectProposal } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -7,8 +8,10 @@ export const dynamic = "force-dynamic";
 export default async function ReviewPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = getDictionary(locale);
+  const s = await getSessionInfo();
+  if (!s) return null;
   const proposals = await prisma.proposal.findMany({
-    where: { status: "PENDING" },
+    where: { status: "PENDING", vertical: tenantWhere(s) },
     orderBy: [{ significance: "desc" }, { createdAt: "desc" }],
     include: { vertical: true },
   });

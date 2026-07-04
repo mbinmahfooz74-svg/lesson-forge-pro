@@ -1,5 +1,6 @@
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
+import { getSessionInfo, tenantWhere } from "@/lib/authz";
 import { submitFeedback } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -7,10 +8,20 @@ export const dynamic = "force-dynamic";
 export default async function FeedbackPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = getDictionary(locale);
-  const verticals = await prisma.vertical.findMany({ orderBy: { createdAt: "asc" } });
+  const s = await getSessionInfo();
+  if (!s) return null;
+  const verticals = await prisma.vertical.findMany({
+    where: { ...tenantWhere(s), slug: { not: "eval-harness" } },
+    orderBy: { createdAt: "asc" },
+  });
 
   // Latest version per (vertical,key) skill-memory entry.
-  const memory = await prisma.skillMemory.findMany({ orderBy: { version: "desc" }, include: { vertical: true }, take: 100 });
+  const memory = await prisma.skillMemory.findMany({
+    where: { OR: [{ vertical: tenantWhere(s) }, ...(s.role === "OWNER" ? [{ verticalId: null }] : [])] },
+    orderBy: { version: "desc" },
+    include: { vertical: true },
+    take: 100,
+  });
   const latest = new Map<string, (typeof memory)[number]>();
   for (const m of memory) {
     const k = `${m.verticalId ?? "global"}:${m.key}`;

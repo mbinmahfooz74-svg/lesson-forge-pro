@@ -2,14 +2,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
+import { getSessionInfo } from "@/lib/authz";
 
 export const dynamic = "force-dynamic";
 
 export default async function SourceDetail({ params }: { params: Promise<{ locale: string; id: string }> }) {
   const { locale, id } = await params;
   const t = getDictionary(locale);
-  const source = await prisma.source.findUnique({ where: { id } });
-  if (!source) notFound();
+  const s = await getSessionInfo();
+  if (!s) return null;
+  const source = await prisma.source.findUnique({ where: { id }, include: { vertical: true } });
+  if (!source || (s.role !== "OWNER" && source.vertical.tenantId !== s.tenantId)) notFound();
   const doc = await prisma.document.findFirst({
     where: { sourceId: id, NOT: { title: { contains: " — part " } } },
     orderBy: { createdAt: "asc" },

@@ -28,9 +28,13 @@ export async function runMaterialsGenerator(payload: AgentJobPayload): Promise<A
   }
   if (!sessionId) return { ok: false, summary: "materials-generator: no drafted session" };
 
-  const session = await prisma.courseSession.findUnique({ where: { id: sessionId }, include: { course: { include: { vertical: true } } } });
+  const session = await prisma.courseSession.findUnique({
+    where: { id: sessionId },
+    include: { course: { include: { vertical: { include: { tenant: true } } } } },
+  });
   if (!session) return { ok: false, summary: "materials-generator: session not found" };
   const vertical = session.course.vertical;
+  const brand = { name: vertical.tenant.brandName || vertical.tenant.name, accent: vertical.tenant.accentColor };
   const disclaimer = vertical.slug === "investment" ? INVESTMENT_DISCLAIMER_EN : undefined;
   const content = session.guideMd || session.planMd;
 
@@ -48,7 +52,7 @@ export async function runMaterialsGenerator(payload: AgentJobPayload): Promise<A
   const deckTitle = `${session.titleEn}`;
   const footer = disclaimer;
 
-  const pptx = await renderPptx(deckTitle, content, footer);
+  const pptx = await renderPptx(deckTitle, content, footer, brand);
   const pptxId = await savePack({ sessionId, kind: "PPTX", lang: "en", ext: "pptx", data: pptx });
 
   const assessmentDocx = await renderDocx(
@@ -58,7 +62,8 @@ export async function runMaterialsGenerator(payload: AgentJobPayload): Promise<A
       { heading: "Rubric", body: assessment.rubric.map((r) => `- ${r.criterion}\n  Excellent: ${r.excellent}\n  Adequate: ${r.adequate}`).join("\n") },
     ],
     false,
-    disclaimer
+    disclaimer,
+    brand
   );
   await savePack({ sessionId, kind: "DOCX", lang: "en", ext: "docx", data: assessmentDocx });
 
@@ -66,10 +71,10 @@ export async function runMaterialsGenerator(payload: AgentJobPayload): Promise<A
     { heading: "Lesson plan", body: session.planMd },
     { heading: "Key points", body: content },
   ];
-  const handoutDocx = await renderDocx(`${session.titleEn} — handout`, handoutSections, false, disclaimer);
+  const handoutDocx = await renderDocx(`${session.titleEn} — handout`, handoutSections, false, disclaimer, brand);
   await savePack({ sessionId, kind: "DOCX", lang: "en-handout", ext: "docx", data: handoutDocx });
 
-  const handoutPdf = await renderPdf(`${session.titleEn} — handout`, handoutSections, disclaimer);
+  const handoutPdf = await renderPdf(`${session.titleEn} — handout`, handoutSections, disclaimer, brand);
   await savePack({ sessionId, kind: "PDF", lang: "en", ext: "pdf", data: handoutPdf });
 
   await prisma.courseSession.update({ where: { id: sessionId }, data: { status: "PUBLISHED" } });

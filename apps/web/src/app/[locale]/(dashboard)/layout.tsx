@@ -14,6 +14,7 @@ export default async function DashboardLayout({
   const t = getDictionary(locale);
   const session = await auth();
   if (!session?.user) redirect(`/${locale}/login`);
+  const role = (session.user as { role?: string }).role;
 
   const nav = [
     { href: `/${locale}`, label: t.nav.briefing },
@@ -22,7 +23,13 @@ export default async function DashboardLayout({
     { href: `/${locale}/courses`, label: t.nav.courses },
     { href: `/${locale}/feedback`, label: t.nav.feedback },
     { href: `/${locale}/review`, label: t.nav.review },
-    { href: `/${locale}/settings`, label: t.nav.settings },
+    ...(role === "TENANT_ADMIN" ? [{ href: `/${locale}/workspace`, label: t.nav.workspace }] : []),
+    ...(role === "OWNER"
+      ? [
+          { href: `/${locale}/tenants`, label: t.nav.tenants },
+          { href: `/${locale}/settings`, label: t.nav.settings },
+        ]
+      : []),
   ];
 
   async function doSignOut() {

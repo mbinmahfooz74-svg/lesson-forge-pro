@@ -2,3 +2,4 @@ export { enqueueSourceIngest, enqueueAgentRun, enqueueWeeklyCycle } from "./enqu
 export { classifyUrl } from "./ingestion/classify.js";
 export { ingestSource } from "./ingestion/ingest.js";
 export { runWeeklyCycle } from "./weekly.js";
+export { createWorkspace, inviteMember, acceptInvite, isB2BEnabled } from "./workspace.js";

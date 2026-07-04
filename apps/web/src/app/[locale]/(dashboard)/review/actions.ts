@@ -3,14 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@lessonforge/db";
 import { enqueueAgentRun } from "@lessonforge/engine";
-import { requireOwner } from "@/lib/authz";
+import { requireStaff } from "@/lib/authz";
 
 export async function approveProposal(formData: FormData) {
-  await requireOwner();
+  const s = await requireStaff();
   const id = String(formData.get("proposalId") ?? "");
   const locale = String(formData.get("locale") ?? "en");
   const p = await prisma.proposal.findUnique({ where: { id }, include: { vertical: true } });
-  if (!p) return;
+  if (!p || (s.role !== "OWNER" && p.vertical.tenantId !== s.tenantId)) return;
   await prisma.proposal.update({ where: { id }, data: { status: "APPROVED", decidedAt: new Date() } });
 
   if (p.kind === "BRIEFING") {
@@ -24,9 +24,11 @@ export async function approveProposal(formData: FormData) {
 }
 
 export async function rejectProposal(formData: FormData) {
-  await requireOwner();
+  const s = await requireStaff();
   const id = String(formData.get("proposalId") ?? "");
   const locale = String(formData.get("locale") ?? "en");
+  const p = await prisma.proposal.findUnique({ where: { id }, include: { vertical: true } });
+  if (!p || (s.role !== "OWNER" && p.vertical.tenantId !== s.tenantId)) return;
   await prisma.proposal.update({ where: { id }, data: { status: "REJECTED", decidedAt: new Date() } });
   revalidatePath(`/${locale}/review`);
 }

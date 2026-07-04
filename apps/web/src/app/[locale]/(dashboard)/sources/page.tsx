@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
+import { getSessionInfo, tenantWhere } from "@/lib/authz";
 import AutoRefresh from "@/components/AutoRefresh";
 import { addSource, retrySource } from "./actions";
 
@@ -17,9 +18,16 @@ const STATUS_COLORS: Record<string, string> = {
 export default async function SourcesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = getDictionary(locale);
+  const s = await getSessionInfo();
+  if (!s) return null;
   const [sources, verticals] = await Promise.all([
-    prisma.source.findMany({ orderBy: { createdAt: "desc" }, take: 100, include: { documents: { where: { title: { not: { contains: " — part " } } }, take: 1 } } }),
-    prisma.vertical.findMany({ orderBy: { createdAt: "asc" } }),
+    prisma.source.findMany({
+      where: { vertical: tenantWhere(s) },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+      include: { documents: { where: { title: { not: { contains: " — part " } } }, take: 1 } },
+    }),
+    prisma.vertical.findMany({ where: { ...tenantWhere(s), slug: { not: "eval-harness" } }, orderBy: { createdAt: "asc" } }),
   ]);
   const active = sources.some((s) => ["QUEUED", "FETCHING", "PROCESSING"].includes(s.status));
 
