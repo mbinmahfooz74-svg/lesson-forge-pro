@@ -42,6 +42,9 @@ const en = {
     pendingProposals: "Pending proposals",
     recentEvents: "Recent engine events",
     noEvents: "No engine events yet — the worker writes here once jobs run.",
+    runWeekly: "Run weekly cycle now",
+    advisory: "Latest weekly advisory",
+    noAdvisory: "No advisory yet — run the weekly cycle to generate one.",
   },
   verticals: {
     title: "Verticals",
@@ -81,7 +84,11 @@ const en = {
   },
   review: {
     title: "Review queue",
-    empty: "No proposals yet. The Market Scout starts filing proposals in Sprint 5.",
+    empty: "No proposals pending. The Market Scout files proposals here on its weekly run.",
+    approve: "Approve",
+    reject: "Reject",
+    significance: "Significance",
+    kind: { NEW_TOPIC: "New topic", CONTENT_UPDATE: "Content update", BRIEFING: "Briefing" },
   },
   settings: {
     title: "Settings",
@@ -133,6 +140,9 @@ const ar: typeof en = {
     pendingProposals: "مقترحات قيد الانتظار",
     recentEvents: "أحدث أحداث المحرك",
     noEvents: "لا توجد أحداث بعد — يكتب المشغّل هنا عند تنفيذ المهام.",
+    runWeekly: "تشغيل الدورة الأسبوعية الآن",
+    advisory: "أحدث ملخص أسبوعي",
+    noAdvisory: "لا يوجد ملخص بعد — شغّل الدورة الأسبوعية لتوليد واحد.",
   },
   verticals: {
     title: "المجالات",
@@ -172,7 +182,11 @@ const ar: typeof en = {
   },
   review: {
     title: "قائمة المراجعة",
-    empty: "لا توجد مقترحات بعد. يبدأ كشّاف السوق بتقديم المقترحات في السبرنت الخامس.",
+    empty: "لا توجد مقترحات معلّقة. يقدّم كشّاف السوق المقترحات هنا في تشغيله الأسبوعي.",
+    approve: "اعتماد",
+    reject: "رفض",
+    significance: "الأهمية",
+    kind: { NEW_TOPIC: "موضوع جديد", CONTENT_UPDATE: "تحديث محتوى", BRIEFING: "ملخص" },
   },
   settings: {
     title: "الإعدادات",

@@ -1,6 +1,7 @@
 import { prisma } from "@lessonforge/db";
 import { auth } from "@/auth";
 import { getDictionary } from "@/dictionaries";
+import { triggerWeeklyCycle } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -9,18 +10,30 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const t = getDictionary(locale);
   const session = await auth();
 
-  const [verticalCount, pendingProposals, events] = await Promise.all([
+  const [verticalCount, pendingProposals, events, advisoryEvent] = await Promise.all([
     prisma.vertical.count(),
     prisma.proposal.count({ where: { status: "PENDING" } }),
     prisma.event.findMany({ orderBy: { createdAt: "desc" }, take: 8 }),
+    prisma.event.findFirst({ where: { type: "advisory.weekly" }, orderBy: { createdAt: "desc" } }),
   ]);
+  const advisory = (advisoryEvent?.payload as { advisory?: string } | null)?.advisory ?? null;
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">
-        {t.home.welcome}, {session?.user?.name}
-      </h1>
-      <p className="mt-1 text-sm text-stone-500">{t.home.stage}</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold">
+            {t.home.welcome}, {session?.user?.name}
+          </h1>
+          <p className="mt-1 text-sm text-stone-500">{t.home.stage}</p>
+        </div>
+        <form action={triggerWeeklyCycle}>
+          <input type="hidden" name="locale" value={locale} />
+          <button className="shrink-0 rounded-md bg-amber-700 px-4 py-2 text-sm font-medium text-white hover:bg-amber-800">
+            {t.home.runWeekly}
+          </button>
+        </form>
+      </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-xl border border-stone-200 bg-white p-5">
@@ -31,6 +44,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="text-sm text-stone-500">{t.home.pendingProposals}</div>
           <div className="mt-1 text-3xl font-semibold">{pendingProposals}</div>
         </div>
+      </div>
+
+      <h2 className="mt-10 text-lg font-medium">{t.home.advisory}</h2>
+      <div className="mt-3 rounded-xl border border-stone-200 bg-white p-5">
+        {advisory ? (
+          <pre className="whitespace-pre-wrap text-sm leading-6 text-stone-700">{advisory}</pre>
+        ) : (
+          <p className="text-sm text-stone-500">{t.home.noAdvisory}</p>
+        )}
       </div>
 
       <h2 className="mt-10 text-lg font-medium">{t.home.recentEvents}</h2>

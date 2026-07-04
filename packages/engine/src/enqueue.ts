@@ -20,6 +20,13 @@ export async function enqueueAgentRun(payload: AgentJobPayload): Promise<string 
   });
 }
 
+export async function enqueueWeeklyCycle(): Promise<string | null> {
+  return withBoss(async (boss) => {
+    await boss.createQueue("weekly.cycle");
+    return boss.send("weekly.cycle", {});
+  });
+}
+
 /**
  * Lightweight producer used by the web app to enqueue jobs without starting a
  * long-lived worker. Opens a boss, ensures the queue exists, sends, and stops.

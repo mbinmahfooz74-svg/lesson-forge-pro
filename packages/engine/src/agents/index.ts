@@ -7,6 +7,9 @@ import { runCurriculumPlanner } from "./curriculum-planner.js";
 import { runLessonDrafter } from "./lesson-drafter.js";
 import { runMaterialsGenerator } from "./materials-generator.js";
 import { runLocalizer } from "./localizer.js";
+import { runMarketScout } from "./market-scout.js";
+import { runBriefingWriter } from "./briefing-writer.js";
+import { runAdvisor } from "./advisor.js";
 
 export type { AgentResult } from "./types.js";
 
@@ -28,12 +31,12 @@ const stub =
 export const registry: Record<AgentName, AgentRun> = {
   "vertical-architect": runVerticalArchitect,
   ingestion: stub("ingestion"),
-  "market-scout": stub("market-scout"),
-  "briefing-writer": stub("briefing-writer"),
+  "market-scout": runMarketScout,
+  "briefing-writer": runBriefingWriter,
   "curriculum-planner": runCurriculumPlanner,
   "lesson-drafter": runLessonDrafter,
   "materials-generator": runMaterialsGenerator,
   localizer: runLocalizer,
-  advisor: stub("advisor"),
+  advisor: runAdvisor,
   "feedback-analyzer": stub("feedback-analyzer"),
 };

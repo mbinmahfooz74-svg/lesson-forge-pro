@@ -3,6 +3,9 @@ import { prisma } from "@lessonforge/db";
 import { getBoss } from "./queue.js";
 import { registry } from "./agents/index.js";
 import { ingestSource } from "./ingestion/ingest.js";
+import { runWeeklyCycle } from "./weekly.js";
+
+const WEEKLY_QUEUE = "weekly.cycle";
 
 async function main() {
   const boss = await getBoss();
@@ -39,7 +42,17 @@ async function main() {
     console.log(`[worker] ${result.summary}`);
   });
 
-  console.log("[worker] Lesson Forge engine worker started. Queues: ping, agent.run");
+  // Weekly autonomous cycle: scout + briefing per vertical, then advisor.
+  await boss.createQueue(WEEKLY_QUEUE);
+  await boss.work(WEEKLY_QUEUE, async () => {
+    console.log("[worker] running weekly cycle…");
+    const res = await runWeeklyCycle();
+    console.log(`[worker] weekly cycle done across ${res.verticals} verticals`);
+  });
+  // Monday 06:00 UTC. pg-boss dedupes the schedule by queue name.
+  await boss.schedule(WEEKLY_QUEUE, "0 6 * * 1", {}, { tz: "UTC" });
+
+  console.log("[worker] Lesson Forge engine worker started. Queues: ping, agent.run, source.ingest, weekly.cycle (cron Mon 06:00 UTC)");
 }
 
 main().catch((err) => {
