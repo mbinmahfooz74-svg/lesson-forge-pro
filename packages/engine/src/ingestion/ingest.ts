@@ -86,9 +86,8 @@ export async function ingestSource(sourceId: string): Promise<IngestResult> {
 
     return { ok: true, documentId: parent.id, quality: quality.score, flags: quality.flags };
   } catch (e) {
-    const err = e as Error;
     const diagnostics =
-      e instanceof ExtractionError ? `${err.message} | tried: ${err.attempts.join("; ")}` : err.message;
+      e instanceof ExtractionError ? `${e.message} | tried: ${e.attempts.join("; ")}` : (e as Error).message;
     await prisma.source.update({ where: { id: sourceId }, data: { status: "FAILED", error: diagnostics } });
     await prisma.event.create({ data: { type: "source.failed", payload: { sourceId, error: diagnostics } } });
     return { ok: false, error: diagnostics };

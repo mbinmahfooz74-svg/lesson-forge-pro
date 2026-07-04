@@ -1,5 +1,9 @@
 export type Locale = "en" | "ar";
 
+// Widen the literal string types of the reference dictionary to `string`, keeping the
+// key structure, so the Arabic dictionary can hold different text under the same shape.
+type DeepWiden<T> = T extends string ? string : { [K in keyof T]: DeepWiden<T[K]> };
+
 const en = {
   appName: "Lesson Forge Pro",
   tagline: "Autonomous education intelligence",
@@ -8,9 +12,22 @@ const en = {
     verticals: "Verticals",
     sources: "Source pipeline",
     courses: "Courses",
+    feedback: "Feedback",
     review: "Review queue",
     settings: "Settings",
     signOut: "Sign out",
+  },
+  feedback: {
+    title: "Feedback console",
+    intro: "Feed a session's transcript, ratings, and debrief back in. The engine distills them into your skill memory — used by every future draft.",
+    vertical: "Vertical",
+    transcript: "Session transcript (optional)",
+    ratings: "Per-section ratings / notes (optional)",
+    debrief: "Debrief — what worked / what flopped / learner questions",
+    submit: "Analyze & learn",
+    memoryTitle: "Skill memory (learned)",
+    memoryEmpty: "No learned memory yet. Submit feedback to build the educator profile.",
+    version: "v",
   },
   courses: {
     title: "Courses",
@@ -98,7 +115,9 @@ const en = {
   },
 } as const;
 
-const ar: typeof en = {
+export type Dictionary = DeepWiden<typeof en>;
+
+const ar: Dictionary = {
   appName: "ليسون فورج برو",
   tagline: "ذكاء تعليمي مستقل",
   nav: {
@@ -106,9 +125,22 @@ const ar: typeof en = {
     verticals: "المجالات",
     sources: "خط المصادر",
     courses: "الدورات",
+    feedback: "التغذية الراجعة",
     review: "قائمة المراجعة",
     settings: "الإعدادات",
     signOut: "تسجيل الخروج",
+  },
+  feedback: {
+    title: "لوحة التغذية الراجعة",
+    intro: "أدخل نص الجلسة والتقييمات والملخص. يستخلص المحرك منها ذاكرة مهاراتك — تُستخدم في كل صياغة لاحقة.",
+    vertical: "المجال",
+    transcript: "نص الجلسة (اختياري)",
+    ratings: "تقييمات/ملاحظات لكل قسم (اختياري)",
+    debrief: "الملخص — ما نجح / ما لم ينجح / أسئلة المتعلمين",
+    submit: "تحليل وتعلّم",
+    memoryTitle: "ذاكرة المهارات (مكتسبة)",
+    memoryEmpty: "لا توجد ذاكرة مكتسبة بعد. أرسل تغذية راجعة لبناء ملف المعلّم.",
+    version: "إصدار ",
   },
   courses: {
     title: "الدورات",
@@ -196,8 +228,8 @@ const ar: typeof en = {
   },
 };
 
-const dictionaries = { en, ar };
+const dictionaries: Record<Locale, Dictionary> = { en, ar };
 
-export function getDictionary(locale: string) {
+export function getDictionary(locale: string): Dictionary {
   return dictionaries[(locale === "ar" ? "ar" : "en") as Locale];
 }

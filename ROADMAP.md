@@ -18,9 +18,13 @@ Cumulative: **~13–14 weeks** from today to full platform. Revenue possible at 
 
 ---
 
-## Stage A — Cloud-ready engine, owner mode (flags off)
+## Stage A — Cloud-ready engine, owner mode (flags off) — ✅ COMPLETE (2026-07-04)
 
-### Sprint 0 — Foundation *(in progress — started 2026-07-03)*
+Sprints 0–6 built, verified, and committed. All 10 agents implemented (LLM calls gated on
+`ANTHROPIC_API_KEY` with deterministic fallbacks); full production build passes. Remaining
+before "live for the owner": add an API key and run real weekly cycles for two weeks.
+
+### Sprint 0 — Foundation ✅
 **Builds:** monorepo (Next.js web + Agent SDK engine workers + shared DB package), Dockerized Postgres with pgvector, full multi-tenant schema (tenants, users/roles, verticals, courses, briefings, proposals, plans, subscriptions, entitlements, feature flags), credentials auth, job queue (pg-boss), EN/AR locale routing with RTL.
 **Outcome:** the app boots, you can log in, an Arabic RTL page renders correctly, and a trivial agent job runs through the queue. Subscriber/B2B tables exist but flags are OFF.
 

@@ -33,6 +33,39 @@ Verify the queue round-trip: with the worker running,
 npm run ping --workspace=packages/engine
 ```
 
+## The engine (Stage A, complete)
+
+Ten agents run on the Claude Agent SDK via a pg-boss queue. LLM agents call Claude when
+`ANTHROPIC_API_KEY` is set and fall back to deterministic output otherwise, so the whole
+pipeline runs offline and turns live the moment a key is added.
+
+| Agent | Does |
+|---|---|
+| Ingestion | URL → extract (web/YouTube/PDF, fallbacks) → quality gate → pgvector embeddings |
+| Vertical Architect | Field name → taxonomy, source map, glossary (EN/AR), course catalog |
+| Curriculum Planner | Topic → multi-session arc, Bloom's objectives, prerequisites |
+| Lesson Drafter | Session → minute-by-minute educator guide (uses skill memory + sources) |
+| Materials Generator | Session → PPTX slides, assessment+rubric (DOCX), handout (DOCX+PDF) |
+| Localizer | Session → RTL Arabic handout |
+| Market Scout | Weekly field scan → classified proposals (needs TAVILY/BRAVE key) |
+| Briefing Writer | Weekly briefing (Investment disclaimer; autonomy dial: publish vs review) |
+| Advisor | Weekly cross-vertical synthesis + AI-spend estimate |
+| Feedback Analyzer | Transcript/ratings/debrief → versioned skill memory (the learning loop) |
+
+Run any agent from the CLI:
+
+```bash
+npm run agent --workspace=packages/engine -- <agent> <verticalSlug> ['{"json":"input"}']
+# e.g. curriculum-planner ai-emerging-tech '{"title":"Prompt engineering","sessions":4}'
+```
+
+The weekly autonomous cycle (scout → briefing → advisor) runs on cron (Mon 06:00 UTC) in
+the worker, or on demand via the "Run weekly cycle" button on the dashboard.
+
+### Optional keys (in `.env`)
+- `ANTHROPIC_API_KEY` — turns on real LLM generation for all agents.
+- `TAVILY_API_KEY` or `BRAVE_API_KEY` — lets the Market Scout scan the web.
+
 ## Stage flags
 
 `subscribers_enabled` and `b2b_enabled` are OFF (Stage A — owner mode). They are flipped in Stages B and C; the schema for plans, subscriptions, and entitlements is already in place.

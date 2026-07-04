@@ -20,6 +20,7 @@ export default async function DashboardLayout({
     { href: `/${locale}/verticals`, label: t.nav.verticals },
     { href: `/${locale}/sources`, label: t.nav.sources },
     { href: `/${locale}/courses`, label: t.nav.courses },
+    { href: `/${locale}/feedback`, label: t.nav.feedback },
     { href: `/${locale}/review`, label: t.nav.review },
     { href: `/${locale}/settings`, label: t.nav.settings },
   ];
