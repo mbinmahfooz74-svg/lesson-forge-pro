@@ -1,5 +1,6 @@
 import { prisma } from "@lessonforge/db";
 import { registry } from "../agents/index.js";
+import { activeLLM } from "../llm.js";
 import { scorePlan, scoreGuide } from "./rubric.js";
 import { GOLDEN_TOPICS, PASS_THRESHOLD, REGRESSION_TOLERANCE } from "./golden-set.js";
 
@@ -52,14 +53,22 @@ async function main() {
   }
 
   const avg = rows.reduce((a, r) => a + (r.plan + r.guide) / 2, 0) / rows.length;
-  const prev = await prisma.event.findFirst({ where: { type: "eval.run" }, orderBy: { createdAt: "desc" } });
+  // Scores are only comparable within a provider — regression compares against the
+  // last run from the SAME provider (switching Groq -> Claude starts a fresh baseline).
+  const provider = activeLLM();
+  const prev = await prisma.event.findFirst({
+    where: { type: "eval.run", payload: { path: ["provider"], equals: provider } },
+    orderBy: { createdAt: "desc" },
+  });
   const prevAvg = (prev?.payload as { avg?: number } | null)?.avg ?? null;
 
   console.log("\n=== Golden-set eval ===");
   for (const r of rows) console.log(`plan ${r.plan.toFixed(2)}  guide ${r.guide.toFixed(2)}  ${r.topic}`);
-  console.log(`\naverage: ${avg.toFixed(3)}${prevAvg != null ? `  (previous: ${prevAvg.toFixed(3)})` : ""}`);
+  console.log(
+    `\nprovider: ${provider}  average: ${avg.toFixed(3)}${prevAvg != null ? `  (previous ${provider}: ${prevAvg.toFixed(3)})` : "  (new baseline for this provider)"}`
+  );
 
-  await prisma.event.create({ data: { type: "eval.run", payload: { avg: Number(avg.toFixed(3)), rows: rows as object[], llm: Boolean(process.env.ANTHROPIC_API_KEY) } } });
+  await prisma.event.create({ data: { type: "eval.run", payload: { avg: Number(avg.toFixed(3)), rows: rows as object[], provider } } });
 
   let failed = false;
   if (avg < PASS_THRESHOLD) {
