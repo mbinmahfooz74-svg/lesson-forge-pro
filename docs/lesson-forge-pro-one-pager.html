@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson Forge Pro — Autonomous education intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c1917; --paper:#f5f5f4; --card:#ffffff; --line:#e7e5e4;
+    --amber:#b45309; --amber-soft:#fef3c7; --teal:#0e7490; --teal-soft:#cffafe;
+    --iron:#211d1a;
+    --mut:#78716c;
+    --disp:"Bitter",Georgia,serif;
+    --body:"IBM Plex Sans","Segoe UI",Tahoma,sans-serif;
+    --mono:"IBM Plex Mono",Consolas,monospace;
+  }
+  html[lang="ar"]{
+    --disp:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+    --body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  h1,h2,h3{font-family:var(--disp);line-height:1.15}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+  html[lang="ar"] .eyebrow{letter-spacing:0}
+  a{color:var(--amber)}
+
+  /* toolbar */
+  .bar{position:sticky;top:0;z-index:50;background:rgba(245,245,244,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .mark{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:800;font-size:17px}
+  .mark svg{display:block}
+  .langbtn{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:999px;padding:8px 18px;font-family:var(--mono);font-size:13px;cursor:pointer;transition:transform .15s ease}
+  .langbtn:hover{transform:translateY(-1px)}
+  .langbtn:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+  /* hero */
+  .hero{padding:72px 0 56px;position:relative;overflow:hidden}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .hero h1{font-size:clamp(34px,4.6vw,54px);font-weight:800;margin:14px 0 18px}
+  .hero h1 em{font-style:normal;color:var(--amber)}
+  .hero p.lede{font-size:18px;color:#44403c;max-width:34em}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;color:#57534e}
+  .chip b{color:var(--amber);font-weight:600}
+
+  /* stacked material artifacts */
+  .stack{position:relative;height:380px}
+  .doc{position:absolute;border-radius:10px;box-shadow:0 18px 40px rgba(28,25,23,.16);border:1px solid var(--line);overflow:hidden;background:#fff;transition:transform .3s ease}
+  .doc:hover{transform:translateY(-6px) rotate(0deg) !important;z-index:9}
+  .doc-slide{width:300px;height:180px;top:8px;inset-inline-start:0;transform:rotate(-4deg)}
+  .doc-ar{width:250px;height:210px;top:120px;inset-inline-end:0;transform:rotate(3deg)}
+  .doc-brief{width:270px;height:170px;top:236px;inset-inline-start:34px;transform:rotate(-2deg)}
+  .doc header{padding:10px 14px;font-family:var(--mono);font-size:10px;color:#a8a29e;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+  .doc .body{padding:12px 14px}
+  .slide-title{font-family:var(--disp);font-weight:700;color:var(--amber);font-size:15px}
+  .doc .rule{height:7px;border-radius:4px;background:#e7e5e4;margin-top:8px}
+  .doc .rule.short{width:62%}
+  .doc .rule.tint{background:var(--amber-soft)}
+  .doc-ar .body{direction:rtl;text-align:right}
+  .doc-ar .slide-title{color:var(--teal)}
+  .doc-ar .rule.tint{background:var(--teal-soft)}
+  .badge{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:999px;background:var(--amber-soft);color:var(--amber)}
+  .doc-ar .badge{background:var(--teal-soft);color:var(--teal)}
+
+  /* stats */
+  .stats{border-block:1px solid var(--line);background:var(--card)}
+  .stats .wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding:26px 28px}
+  .stat{padding:0 18px;border-inline-start:1px solid var(--line)}
+  .stat:first-child{border-inline-start:0;padding-inline-start:0}
+  .stat b{display:block;font-family:var(--disp);font-size:30px;font-weight:800}
+  .stat span{font-size:12.5px;color:var(--mut)}
+
+  section{padding:70px 0}
+  .sec-head{max-width:38em;margin-bottom:36px}
+  .sec-head h2{font-size:clamp(26px,3.2vw,36px);font-weight:800;margin-top:12px}
+  .sec-head p{color:#57534e;margin-top:10px}
+
+  /* pipeline */
+  .pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 16px;position:relative;transition:transform .2s ease,box-shadow .2s ease}
+  .step:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(28,25,23,.09)}
+  .step .ico{width:34px;height:34px;border-radius:9px;background:var(--amber-soft);display:grid;place-items:center;margin-bottom:12px}
+  .step h3{font-size:15.5px;margin-bottom:6px}
+  .step p{font-size:13px;color:var(--mut);line-height:1.5}
+  .step::after{content:"→";position:absolute;top:24px;inset-inline-end:-14px;color:#d6d3d1;font-size:15px;z-index:2}
+  html[lang="ar"] .step::after{content:"←"}
+  .step:last-child::after{content:""}
+
+  /* dark cycle band */
+  .night{background:var(--iron);color:#e7e5e4}
+  .night .eyebrow{color:#f59e0b}
+  .night h2{color:#fafaf9}
+  .night .sec-head p{color:#a8a29e}
+  .cycle{display:grid;grid-template-columns:340px 1fr;gap:44px;align-items:center}
+  .dial{position:relative;width:320px;height:320px;margin:0 auto}
+  .dial svg{width:100%;height:100%}
+  .stopbtn{cursor:pointer}
+  .stopbtn circle{transition:all .2s ease}
+  .stopbtn.active circle.dot{fill:#f59e0b;r:15}
+  .stopbtn.active text{fill:#1c1917;font-weight:700}
+  .stage-panel{background:#2a2523;border:1px solid #3f3a36;border-radius:14px;padding:26px 28px;min-height:196px}
+  .stage-panel .k{font-family:var(--mono);font-size:11.5px;color:#f59e0b;letter-spacing:.1em;text-transform:uppercase}
+  html[lang="ar"] .stage-panel .k{letter-spacing:0}
+  .stage-panel h3{font-size:21px;margin:8px 0 10px;color:#fafaf9}
+  .stage-panel p{color:#c7c1bc;font-size:14.5px}
+  .stage-panel .out{margin-top:14px;font-family:var(--mono);font-size:12px;color:#8d867f}
+  .clockline{margin-top:18px;font-family:var(--mono);font-size:12.5px;color:#8d867f;text-align:center}
+
+  /* verticals */
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .vcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;transition:transform .2s ease,box-shadow .2s ease}
+  .vcard:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(28,25,23,.09)}
+  .vcard .ar-name{display:block;color:var(--mut);font-size:13.5px;margin-top:2px;direction:rtl;text-align:start}
+  .vcard h3{font-size:16.5px}
+  .vcard p{font-size:13px;color:var(--mut);margin-top:10px}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:3px 9px;border-radius:999px;margin-bottom:10px}
+  .tag.prem{background:var(--amber-soft);color:var(--amber)}
+  .tag.std{background:#f5f5f4;color:#78716c;border:1px solid var(--line)}
+  .anyfield{margin-top:16px;border:1px dashed #d6d3d1;border-radius:12px;padding:16px 20px;font-size:14px;color:#57534e;background:transparent}
+  .anyfield b{color:var(--amber)}
+
+  /* agents strip */
+  .agents{display:flex;flex-wrap:wrap;gap:8px}
+  .agent{position:relative;font-family:var(--mono);font-size:12.5px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 13px;cursor:default;transition:border-color .15s}
+  .agent:hover{border-color:var(--amber)}
+  .agent i{font-style:normal;color:var(--amber);margin-inline-end:7px}
+  .agent .tip{position:absolute;bottom:calc(100% + 8px);inset-inline-start:0;width:230px;background:var(--ink);color:#e7e5e4;font-family:var(--body);font-size:12.5px;line-height:1.5;padding:10px 12px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:20}
+  .agent:hover .tip,.agent:focus-within .tip{opacity:1}
+
+  /* B2B */
+  .b2b{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  .falcon{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(28,25,23,.10)}
+  .falcon .fhead{background:var(--teal);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+  .falcon .fhead b{font-family:var(--disp);font-size:15px}
+  .falcon .fhead span{font-family:var(--mono);font-size:10.5px;opacity:.85}
+  .falcon .fbody{padding:18px 20px}
+  .frow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .frow:last-child{border-bottom:0}
+  .frow span:last-child{font-family:var(--mono);font-size:12px;color:var(--teal)}
+  .b2b ul{list-style:none;margin-top:18px}
+  .b2b li{padding:9px 0;padding-inline-start:30px;position:relative;font-size:15px;color:#44403c}
+  .b2b li::before{content:"";position:absolute;inset-inline-start:0;top:14px;width:16px;height:16px;border-radius:5px;background:var(--teal-soft)}
+  .b2b li::after{content:"✓";position:absolute;inset-inline-start:3px;top:6px;color:var(--teal);font-size:11px}
+
+  /* trust tiles + stages rail */
+  .grid4 .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .tile h3{font-size:15px;margin-bottom:8px}
+  .tile p{font-size:13px;color:var(--mut)}
+  .tile .ico{width:30px;height:30px;border-radius:8px;background:var(--amber-soft);display:grid;place-items:center;margin-bottom:12px}
+  .rail{margin-top:44px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .phase{border-top:3px solid var(--line);padding-top:14px}
+  .phase.done{border-top-color:var(--amber)}
+  .phase.next{border-top-color:#d6d3d1;border-top-style:dashed}
+  .phase .k{font-family:var(--mono);font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+  html[lang="ar"] .phase .k{letter-spacing:0}
+  .phase h3{font-size:15.5px;margin:6px 0 4px}
+  .phase p{font-size:13px;color:var(--mut)}
+  .phase .state{font-family:var(--mono);font-size:11px;color:var(--amber)}
+
+  footer{border-top:1px solid var(--line);background:var(--card);padding:30px 0 40px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  footer .stackline{font-family:var(--mono);font-size:12px;color:var(--mut)}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    *{transition:none !important;animation:none !important}
+  }
+  @media (max-width:900px){
+    .hero .wrap,.cycle,.b2b{grid-template-columns:1fr}
+    .stack{height:340px;max-width:420px;margin:10px auto 0}
+    .stats .wrap{grid-template-columns:repeat(2,1fr);row-gap:22px}
+    .stat{border-inline-start:0;padding:0}
+    .pipe{grid-template-columns:1fr 1fr}
+    .step::after{content:""}
+    .grid4{grid-template-columns:1fr 1fr}
+    .rail{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="mark">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="6" fill="#b45309"/><path d="M8 18V8h9M8 13h7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <span>Lesson Forge <em style="color:var(--amber);font-style:normal">Pro</em></span>
+    </div>
+    <button class="langbtn" id="langToggle" aria-label="Switch language">عرض بالعربية</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow" data-i18n="heroEyebrow">Autonomous education intelligence</div>
+      <h1 data-i18n-html="heroTitle">Six days of lesson prep.<br>Now <em>one autonomous day</em>.</h1>
+      <p class="lede" data-i18n="heroLede">Pick a field. The engine watches the market, builds the curriculum, writes the educator guide minute by minute, and delivers branded slides, assessments, and handouts — in English and Arabic. You review one queue and read one email a week.</p>
+      <div class="chips">
+        <span class="chip"><b>10</b>&nbsp;<span data-i18n="chipAgents">specialist agents</span></span>
+        <span class="chip"><b>EN + AR</b>&nbsp;<span data-i18n="chipLang">native bilingual</span></span>
+        <span class="chip"><b>B2B</b>&nbsp;<span data-i18n="chipTenant">branded workspaces</span></span>
+        <span class="chip"><b data-i18n="chipWeeklyB">Weekly</b>&nbsp;<span data-i18n="chipWeekly">self-updating</span></span>
+      </div>
+    </div>
+    <div class="stack" aria-label="Generated material examples">
+      <div class="doc doc-slide">
+        <header><span>fire-safety-s1.pptx</span><span class="badge" data-i18n="artSlides">SLIDES</span></header>
+        <div class="body">
+          <div class="slide-title" data-i18n="artSlideTitle">Fire safety essentials</div>
+          <div class="rule tint"></div><div class="rule"></div><div class="rule short"></div>
+        </div>
+      </div>
+      <div class="doc doc-ar">
+        <header><span>handout-ar.docx</span><span class="badge">عربي · RTL</span></header>
+        <div class="body">
+          <div class="slide-title">أساسيات السلامة من الحرائق</div>
+          <div class="rule tint"></div><div class="rule"></div><div class="rule short"></div>
+        </div>
+      </div>
+      <div class="doc doc-brief">
+        <header><span>weekly-briefing.md</span><span class="badge" data-i18n="artBrief">BRIEFING</span></header>
+        <div class="body">
+          <div class="slide-title" style="font-size:13px" data-i18n="artBriefTitle">What moved this week</div>
+          <div class="rule"></div><div class="rule tint short"></div><div class="rule"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap">
+    <div class="stat"><b>10</b><span data-i18n="statAgents">agents from ingestion to advisory</span></div>
+    <div class="stat"><b>2</b><span data-i18n="statLang">languages, RTL-correct documents</span></div>
+    <div class="stat"><b>5</b><span data-i18n="statFormats">output formats per session (PPTX, DOCX ×2, PDF, AR)</span></div>
+    <div class="stat"><b>15+</b><span data-i18n="statNews">market signals scanned per field, weekly</span></div>
+    <div class="stat"><b>0.90</b><span data-i18n="statEval">quality-gate eval baseline, re-scored on every change</span></div>
+  </div>
+</div>
+
+<section id="pipeline">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow" data-i18n="pipeEyebrow">The pipeline</div>
+      <h2 data-i18n="pipeTitle">From any source to a teach-ready pack</h2>
+      <p data-i18n="pipeLede">Drop a URL — an article, a YouTube video, a PDF report. Everything downstream is automatic.</p>
+    </div>
+    <div class="pipe">
+      <div class="step reveal"><div class="ico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7.5 10.5l3-3M5 13l-1.5 1.5a3 3 0 104.2 4.2L9 17.5M13 5l1.5-1.5a3 3 0 10-4.2-4.2L9 .5" stroke="#b45309" stroke-width="1.6" transform="translate(0 -0.5) scale(0.9)"/></svg></div><h3 data-i18n="s1t">Ingest anything</h3><p data-i18n="s1p">Web, YouTube, PDF, threads — with fallback chains and a quality gate that flags weak captures.</p></div>
+      <div class="step reveal"><div class="ico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="#b45309" stroke-width="1.6"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="#b45309" stroke-width="1.6"/><rect x="2" y="10" width="6" height="6" rx="1.5" stroke="#b45309" stroke-width="1.6"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="#b45309" stroke-width="1.6"/></svg></div><h3 data-i18n="s2t">Self-build the field</h3><p data-i18n="s2p">Name a field in one sentence — the architect builds its taxonomy, source map, and course catalog.</p></div>
+      <div class="step reveal"><div class="ico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 15V3m0 12h12M6 12l3-4 2.5 2L15 5" stroke="#b45309" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3 data-i18n="s3t">Plan the arc</h3><p data-i18n="s3p">Multi-session curricula with Bloom's-mapped objectives and prerequisite ordering.</p></div>
+      <div class="step reveal"><div class="ico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#b45309" stroke-width="1.6"/><path d="M9 5v4l3 2" stroke="#b45309" stroke-width="1.6" stroke-linecap="round"/></svg></div><h3 data-i18n="s4t">Write the guide</h3><p data-i18n="s4p">Minute-by-minute educator guides: timing, talking points, analogies, anticipated questions.</p></div>
+      <div class="step reveal"><div class="ico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#b45309" stroke-width="1.6"/><path d="M11 2v4h4" stroke="#b45309" stroke-width="1.6"/></svg></div><h3 data-i18n="s5t">Deliver the pack</h3><p data-i18n="s5p">Branded PPTX, assessments with rubrics, learner handouts in DOCX and PDF — plus the Arabic edition.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="night" id="cycle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow" data-i18n="cycEyebrow">The weekly cycle</div>
+      <h2 data-i18n="cycTitle">Monday, 06:00. The engine clocks in.</h2>
+      <p data-i18n="cycLede">Every week, unattended. Click a station to see what happens.</p>
+    </div>
+    <div class="cycle">
+      <div>
+        <div class="dial" id="dial"></div>
+        <div class="clockline" data-i18n="cycClock">cron 0 6 * * 1 · runs while you sleep</div>
+      </div>
+      <div class="stage-panel" id="stagePanel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section id="verticals">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow" data-i18n="vertEyebrow">Diversity of fields</div>
+      <h2 data-i18n="vertTitle">Any field. Its own living curriculum.</h2>
+      <p data-i18n="vertLede">Four verticals run today — and the engine builds a new one from a single sentence.</p>
+    </div>
+    <div class="grid4">
+      <div class="vcard reveal"><span class="tag prem" data-i18n="tagPremium">PREMIUM</span><h3 data-i18n="v1t">Investment</h3><span class="ar-name">الاستثمار</span><p data-i18n="v1p">Weekly market-intelligence briefings plus courses. Compliance-locked: educational only, review-first, disclaimers in both languages.</p></div>
+      <div class="vcard reveal"><span class="tag std" data-i18n="tagStd">VERTICAL</span><h3 data-i18n="v2t">AI &amp; emerging tech</h3><span class="ar-name">الذكاء الاصطناعي والتقنيات الناشئة</span><p data-i18n="v2p">The fastest-moving field — the showcase for weekly self-updating content.</p></div>
+      <div class="vcard reveal"><span class="tag std" data-i18n="tagStd2">VERTICAL</span><h3 data-i18n="v3t">Business &amp; professional skills</h3><span class="ar-name">مهارات الأعمال والمهارات المهنية</span><p data-i18n="v3p">Management, sales, and entrepreneurship with case-study-driven sessions.</p></div>
+      <div class="vcard reveal"><span class="tag std" data-i18n="tagStd3">VERTICAL</span><h3 data-i18n="v4t">Finance &amp; economy</h3><span class="ar-name">المال والاقتصاد</span><p data-i18n="v4p">Personal finance, fintech, and regional economic developments.</p></div>
+    </div>
+    <div class="anyfield reveal" data-i18n-html="anyField"><b>+ Your field:</b> describe it in one sentence — taxonomy, glossary, and course catalog arrive in minutes, ready to edit.</div>
+
+    <div style="margin-top:52px" class="reveal">
+      <div class="eyebrow" style="margin-bottom:14px" data-i18n="agentsEyebrow">The roster — hover any agent</div>
+      <div class="agents" id="agents"></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--card);border-block:1px solid var(--line)" id="b2b">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow" data-i18n="b2bEyebrow">Built for enterprise &amp; SMB</div>
+      <h2 data-i18n="b2bTitle">Your clients get their own engine — in their own brand</h2>
+    </div>
+    <div class="b2b">
+      <div class="falcon reveal" aria-label="Example tenant workspace">
+        <div class="fhead"><b>Falcon Training Co</b><span data-i18n="fWorkspace">TENANT WORKSPACE</span></div>
+        <div class="fbody">
+          <div class="frow"><span data-i18n="fField">Private field</span><span data-i18n="fFieldV">Workplace safety &amp; compliance</span></div>
+          <div class="frow"><span data-i18n="fSeats">Seats</span><span>3 / 3 <span data-i18n="fEnforced">· enforced</span></span></div>
+          <div class="frow"><span data-i18n="fBrand">Branding on every pack</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#0e7490;vertical-align:-1px"></span> #0E7490</span></div>
+          <div class="frow"><span data-i18n="fIsolation">Data isolation</span><span data-i18n="fIsolationV">zero cross-tenant access</span></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <ul>
+          <li data-i18n="b1">Self-service workspace signup with invited members and seat limits</li>
+          <li data-i18n="b2">Every slide deck and handout carries the client's name and colors</li>
+          <li data-i18n="b3">Tenant data is isolated at every page, action, and download</li>
+          <li data-i18n="b4">The same weekly autonomous cycle serves each workspace's private fields</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trust">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow" data-i18n="trustEyebrow">Quality &amp; governance</div>
+      <h2 data-i18n="trustTitle">Autonomous — never unaccountable</h2>
+    </div>
+    <div class="grid4">
+      <div class="tile reveal"><div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 2.5V8c0 3.5-2.7 5.9-6 7-3.3-1.1-6-3.5-6-7V3.5L8 1z" stroke="#b45309" stroke-width="1.5"/><path d="M5.5 8l1.8 1.8L11 6" stroke="#b45309" stroke-width="1.5"/></svg></div><h3 data-i18n="t1t">Autonomy dial</h3><p data-i18n="t1p">Per field: review-first (nothing publishes without approval) or full-auto once it earns trust.</p></div>
+      <div class="tile reveal"><div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 14V2m0 12h12M5 10l2.5-3 2 1.5L13 4" stroke="#b45309" stroke-width="1.5" stroke-linecap="round"/></svg></div><h3 data-i18n="t2t">Golden-set evals</h3><p data-i18n="t2p">Five benchmark topics re-scored on every engine change; regressions block the release.</p></div>
+      <div class="tile reveal"><div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M3 5c0-1.7 2.2-3 5-3s5 1.3 5 3-2.2 3-5 3-5-1.3-5-3zm0 0v6c0 1.7 2.2 3 5 3s5-1.3 5-3V5" stroke="#b45309" stroke-width="1.5"/></svg></div><h3 data-i18n="t3t">Versioned learning</h3><p data-i18n="t3p">Feedback distills into inspectable skill memory — every change auditable, every version revertible.</p></div>
+      <div class="tile reveal"><div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#b45309" stroke-width="1.5"/><path d="M8 5v3.5H11" stroke="#b45309" stroke-width="1.5" stroke-linecap="round"/></svg></div><h3 data-i18n="t4t">Metered spend</h3><p data-i18n="t4p">Token and cost tracking per agent run, rolled into the weekly advisory.</p></div>
+    </div>
+
+    <div class="rail">
+      <div class="phase done reveal"><span class="k" data-i18n="phA">Stage A — live</span><h3 data-i18n="phAt">The engine, proven</h3><p data-i18n="phAp">Ingestion → curricula → bilingual packs → weekly autonomy → learning loop. Running today.</p><span class="state" data-i18n="phAs">✓ shipped</span></div>
+      <div class="phase done reveal"><span class="k" data-i18n="phC">B2B workspaces — live</span><h3 data-i18n="phCt">Pilot-ready tenancy</h3><p data-i18n="phCp">Branded workspaces with seats, invites, and isolation — built for GCC corporate pilots.</p><span class="state" data-i18n="phCs">✓ shipped</span></div>
+      <div class="phase next reveal"><span class="k" data-i18n="phB">Next — activation</span><h3 data-i18n="phBt">Cloud + subscriptions</h3><p data-i18n="phBp">Production deploy for pilots, then the subscriber portal with tiered plans. A flag flip, not a rebuild.</p><span class="state" style="color:#a8a29e" data-i18n="phBs">→ scheduled</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="mark" style="font-size:15px">
+      <svg width="20" height="20" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="6" fill="#b45309"/><path d="M8 18V8h9M8 13h7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <span>Lesson Forge Pro</span>
+    </div>
+    <div class="stackline">Next.js · Claude Agent SDK · Postgres + pgvector · EN/AR · <span data-i18n="footBuilt">built in 8 verified sprints</span></div>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+  en: {
+    heroEyebrow:"Autonomous education intelligence",
+    heroTitle:"Six days of lesson prep.<br>Now <em>one autonomous day</em>.",
+    heroLede:"Pick a field. The engine watches the market, builds the curriculum, writes the educator guide minute by minute, and delivers branded slides, assessments, and handouts — in English and Arabic. You review one queue and read one email a week.",
+    chipAgents:"specialist agents", chipLang:"native bilingual", chipTenant:"branded workspaces", chipWeeklyB:"Weekly", chipWeekly:"self-updating",
+    artSlides:"SLIDES", artSlideTitle:"Fire safety essentials", artBrief:"BRIEFING", artBriefTitle:"What moved this week",
+    statAgents:"agents from ingestion to advisory", statLang:"languages, RTL-correct documents", statFormats:"output formats per session (PPTX, DOCX ×2, PDF, AR)", statNews:"market signals scanned per field, weekly", statEval:"quality-gate eval baseline, re-scored on every change",
+    pipeEyebrow:"The pipeline", pipeTitle:"From any source to a teach-ready pack", pipeLede:"Drop a URL — an article, a YouTube video, a PDF report. Everything downstream is automatic.",
+    s1t:"Ingest anything", s1p:"Web, YouTube, PDF, threads — with fallback chains and a quality gate that flags weak captures.",
+    s2t:"Self-build the field", s2p:"Name a field in one sentence — the architect builds its taxonomy, source map, and course catalog.",
+    s3t:"Plan the arc", s3p:"Multi-session curricula with Bloom's-mapped objectives and prerequisite ordering.",
+    s4t:"Write the guide", s4p:"Minute-by-minute educator guides: timing, talking points, analogies, anticipated questions.",
+    s5t:"Deliver the pack", s5p:"Branded PPTX, assessments with rubrics, learner handouts in DOCX and PDF — plus the Arabic edition.",
+    cycEyebrow:"The weekly cycle", cycTitle:"Monday, 06:00. The engine clocks in.", cycLede:"Every week, unattended. Click a station to see what happens.", cycClock:"cron 0 6 * * 1 · runs while you sleep",
+    vertEyebrow:"Diversity of fields", vertTitle:"Any field. Its own living curriculum.", vertLede:"Four verticals run today — and the engine builds a new one from a single sentence.",
+    tagPremium:"PREMIUM", tagStd:"VERTICAL", tagStd2:"VERTICAL", tagStd3:"VERTICAL",
+    v1t:"Investment", v1p:"Weekly market-intelligence briefings plus courses. Compliance-locked: educational only, review-first, disclaimers in both languages.",
+    v2t:"AI & emerging tech", v2p:"The fastest-moving field — the showcase for weekly self-updating content.",
+    v3t:"Business & professional skills", v3p:"Management, sales, and entrepreneurship with case-study-driven sessions.",
+    v4t:"Finance & economy", v4p:"Personal finance, fintech, and regional economic developments.",
+    anyField:"<b>+ Your field:</b> describe it in one sentence — taxonomy, glossary, and course catalog arrive in minutes, ready to edit.",
+    agentsEyebrow:"The roster — hover any agent",
+    b2bEyebrow:"Built for enterprise & SMB", b2bTitle:"Your clients get their own engine — in their own brand",
+    fWorkspace:"TENANT WORKSPACE", fField:"Private field", fFieldV:"Workplace safety & compliance", fSeats:"Seats", fEnforced:"· enforced", fBrand:"Branding on every pack", fIsolation:"Data isolation", fIsolationV:"zero cross-tenant access",
+    b1:"Self-service workspace signup with invited members and seat limits",
+    b2:"Every slide deck and handout carries the client's name and colors",
+    b3:"Tenant data is isolated at every page, action, and download",
+    b4:"The same weekly autonomous cycle serves each workspace's private fields",
+    trustEyebrow:"Quality & governance", trustTitle:"Autonomous — never unaccountable",
+    t1t:"Autonomy dial", t1p:"Per field: review-first (nothing publishes without approval) or full-auto once it earns trust.",
+    t2t:"Golden-set evals", t2p:"Five benchmark topics re-scored on every engine change; regressions block the release.",
+    t3t:"Versioned learning", t3p:"Feedback distills into inspectable skill memory — every change auditable, every version revertible.",
+    t4t:"Metered spend", t4p:"Token and cost tracking per agent run, rolled into the weekly advisory.",
+    phA:"Stage A — live", phAt:"The engine, proven", phAp:"Ingestion → curricula → bilingual packs → weekly autonomy → learning loop. Running today.", phAs:"✓ shipped",
+    phC:"B2B workspaces — live", phCt:"Pilot-ready tenancy", phCp:"Branded workspaces with seats, invites, and isolation — built for GCC corporate pilots.", phCs:"✓ shipped",
+    phB:"Next — activation", phBt:"Cloud + subscriptions", phBp:"Production deploy for pilots, then the subscriber portal with tiered plans. A flag flip, not a rebuild.", phBs:"→ scheduled",
+    footBuilt:"built in 8 verified sprints",
+    langBtn:"عرض بالعربية",
+    stages:[
+      {k:"Station 1 · Scout", t:"Scan the field", p:"Search queries built for each field run against live news and the web. Findings are classified — new topic, content update, or noise — with a significance score.", o:"output → scored proposals"},
+      {k:"Station 2 · Briefing", t:"Write the briefing", p:"What moved, why it matters, and what to learn next — with the investment disclaimer locked in where required.", o:"output → weekly briefing (EN + AR)"},
+      {k:"Station 3 · Build", t:"Refresh the material", p:"Approved topics become courses; affected lessons are revised so nothing you teach goes stale.", o:"output → updated curricula"},
+      {k:"Station 4 · Render", t:"Generate the packs", p:"Slides, assessments with rubrics, and handouts render in the workspace's own branding, in both languages.", o:"output → PPTX · DOCX · PDF · AR"},
+      {k:"Station 5 · Review", t:"Your one queue", p:"Review-first fields wait for your approval. One click approves a topic and kicks off its course automatically.", o:"your effort → minutes, not days"},
+      {k:"Station 6 · Learn", t:"Get smarter", p:"Your edits, ratings, and debriefs distill into versioned skill memory — next week's drafts inherit everything learned.", o:"output → advisory email + skill memory"}
+    ],
+    agents:[
+      ["01","Ingestion","Any URL to clean, quality-scored, indexed source material."],
+      ["02","Vertical Architect","Builds a new field's taxonomy, sources, and catalog from one sentence."],
+      ["03","Market Scout","Scans the field weekly and files scored proposals."],
+      ["04","Briefing Writer","Turns findings into the weekly briefing, disclaimers included."],
+      ["05","Curriculum Planner","Designs multi-session arcs mapped to Bloom's taxonomy."],
+      ["06","Lesson Drafter","Writes the minute-by-minute educator guide in your voice."],
+      ["07","Materials Generator","Renders branded slides, assessments, and handouts."],
+      ["08","Localizer","Culturally adapts everything into RTL-correct Arabic."],
+      ["09","Advisor","Synthesizes the week across fields into one email."],
+      ["10","Feedback Analyzer","Distills your feedback into versioned skill memory."]
+    ]
+  },
+  ar: {
+    heroEyebrow:"ذكاء تعليمي مستقل",
+    heroTitle:"ستة أيام لإعداد الدروس.<br>أصبحت <em>يوماً واحداً مستقلاً</em>.",
+    heroLede:"اختر مجالاً، ويتولى المحرك الباقي: يراقب السوق، ويبني المنهج، ويكتب دليل المعلّم دقيقة بدقيقة، ويسلّم شرائح واختبارات ومطبوعات بهوية عميلك — بالعربية والإنجليزية. جهدك أسبوعياً: مراجعة قائمة واحدة وقراءة بريد واحد.",
+    chipAgents:"وكلاء متخصصون", chipLang:"ثنائي اللغة أصلاً", chipTenant:"مساحات عمل بهوية العميل", chipWeeklyB:"أسبوعياً", chipWeekly:"يحدّث نفسه",
+    artSlides:"شرائح", artSlideTitle:"Fire safety essentials", artBrief:"ملخص", artBriefTitle:"ما الذي تغيّر هذا الأسبوع",
+    statAgents:"وكلاء من الاستيعاب إلى الاستشارة", statLang:"لغتان ومستندات صحيحة الاتجاه", statFormats:"صيغ إخراج لكل جلسة (PPTX وDOCX وPDF وعربي)", statNews:"إشارة سوق تُفحص لكل مجال أسبوعياً", statEval:"خط أساس لبوابة الجودة يعاد قياسه مع كل تغيير",
+    pipeEyebrow:"خط الإنتاج", pipeTitle:"من أي مصدر إلى حقيبة تدريبية جاهزة", pipeLede:"ضع رابطاً — مقالاً أو فيديو يوتيوب أو تقرير PDF. وكل ما بعده تلقائي.",
+    s1t:"استيعاب أي مصدر", s1p:"مواقع ويوتيوب وPDF — بسلاسل احتياطية وبوابة جودة ترصد الالتقاط الضعيف.",
+    s2t:"بناء المجال ذاتياً", s2p:"صِف المجال بجملة واحدة — يبني المهندس تصنيفه وخريطة مصادره وكتالوج دوراته.",
+    s3t:"تخطيط المسار", s3p:"مناهج متعددة الجلسات بأهداف مصنّفة وفق هرم بلوم وترتيب للمتطلبات.",
+    s4t:"كتابة الدليل", s4p:"أدلة معلّم دقيقة بدقيقة: التوقيت ونقاط الحديث والتشبيهات وأسئلة المتعلمين المتوقعة.",
+    s5t:"تسليم الحقيبة", s5p:"شرائح بهوية العميل واختبارات بمعايير تقييم ومطبوعات DOCX وPDF — مع النسخة العربية.",
+    cycEyebrow:"الدورة الأسبوعية", cycTitle:"الاثنين، السادسة صباحاً. يبدأ المحرك عمله.", cycLede:"كل أسبوع، دون تدخل. انقر أي محطة لترى ما يحدث.", cycClock:"cron 0 6 * * 1 · يعمل بينما تنام",
+    vertEyebrow:"تنوّع المجالات", vertTitle:"أي مجال. بمنهج حيّ خاص به.", vertLede:"أربعة مجالات تعمل اليوم — ويبني المحرك مجالاً جديداً من جملة واحدة.",
+    tagPremium:"مميز", tagStd:"مجال", tagStd2:"مجال", tagStd3:"مجال",
+    v1t:"الاستثمار", v1p:"ملخصات استخبارات سوق أسبوعية مع دورات. منضبط تنظيمياً: تعليمي فقط، مراجعة أولاً، وإخلاء مسؤولية باللغتين.",
+    v2t:"الذكاء الاصطناعي والتقنيات الناشئة", v2p:"أسرع المجالات حركة — واجهة عرض المحتوى الذي يحدّث نفسه أسبوعياً.",
+    v3t:"مهارات الأعمال والمهارات المهنية", v3p:"الإدارة والمبيعات وريادة الأعمال بجلسات قائمة على دراسات الحالة.",
+    v4t:"المال والاقتصاد", v4p:"التمويل الشخصي والتقنية المالية والتطورات الاقتصادية الإقليمية.",
+    anyField:"<b>+ مجالك أنت:</b> صِفه بجملة واحدة — يصلك التصنيف والمسرد وكتالوج الدورات خلال دقائق، جاهزاً للتحرير.",
+    agentsEyebrow:"الفريق — مرّر فوق أي وكيل",
+    b2bEyebrow:"مصمم للشركات والمؤسسات", b2bTitle:"كل عميل يحصل على محركه الخاص — بهويته الخاصة",
+    fWorkspace:"مساحة عمل مستأجر", fField:"مجال خاص", fFieldV:"السلامة والامتثال في مكان العمل", fSeats:"المقاعد", fEnforced:"· مُلزَم", fBrand:"الهوية على كل حقيبة", fIsolation:"عزل البيانات", fIsolationV:"لا وصول بين المستأجرين",
+    b1:"تسجيل ذاتي لمساحة العمل مع دعوة الأعضاء وحدود المقاعد",
+    b2:"كل عرض شرائح ومطبوعة يحمل اسم العميل وألوانه",
+    b3:"بيانات كل مستأجر معزولة في كل صفحة وإجراء وتنزيل",
+    b4:"الدورة الأسبوعية المستقلة نفسها تخدم المجالات الخاصة بكل مساحة عمل",
+    trustEyebrow:"الجودة والحوكمة", trustTitle:"مستقل — لكن محاسَب دائماً",
+    t1t:"مفتاح الاستقلالية", t1p:"لكل مجال: مراجعة أولاً (لا يُنشر شيء دون موافقتك) أو تلقائي كامل بعد أن يكسب الثقة.",
+    t2t:"اختبارات معيارية", t2p:"خمسة موضوعات مرجعية يعاد قياسها مع كل تغيير في المحرك؛ أي تراجع يوقف الإصدار.",
+    t3t:"تعلّم موثّق بإصدارات", t3p:"تتحول ملاحظاتك إلى ذاكرة مهارات قابلة للفحص — كل تغيير مدقَّق وكل إصدار قابل للاسترجاع.",
+    t4t:"إنفاق مُقاس", t4p:"تتبع الرموز والتكلفة لكل تشغيل وكيل، ضمن الملخص الأسبوعي.",
+    phA:"المرحلة أ — تعمل", phAt:"المحرك، مثبَت عملياً", phAp:"استيعاب ← مناهج ← حقائب ثنائية اللغة ← استقلالية أسبوعية ← حلقة تعلّم. يعمل اليوم.", phAs:"✓ مُنجز",
+    phC:"مساحات الشركات — تعمل", phCt:"استئجار جاهز للتجربة", phCp:"مساحات عمل بهوية العميل مع مقاعد ودعوات وعزل — بُنيت لتجارب الشركات الخليجية.", phCs:"✓ مُنجز",
+    phB:"التالي — التفعيل", phBt:"السحابة والاشتراكات", phBp:"نشر إنتاجي للتجارب، ثم بوابة المشتركين بخطط متدرجة. تفعيل بمفتاح، لا إعادة بناء.", phBs:"← مجدول",
+    footBuilt:"بُني في ٨ سبرنتات مُتحقق منها",
+    langBtn:"View in English",
+    stages:[
+      {k:"المحطة ١ · الكشاف", t:"مسح المجال", p:"استعلامات بحث مبنية لكل مجال تعمل على الأخبار الحية والويب. تُصنَّف النتائج — موضوع جديد أو تحديث محتوى أو ضوضاء — مع درجة أهمية.", o:"الناتج ← مقترحات مُقيَّمة"},
+      {k:"المحطة ٢ · الملخص", t:"كتابة الملخص", p:"ما الذي تغيّر، ولماذا يهم، وما الذي يُتعلم بعده — مع إخلاء مسؤولية الاستثمار مثبتاً حيث يلزم.", o:"الناتج ← ملخص أسبوعي (عربي + إنجليزي)"},
+      {k:"المحطة ٣ · البناء", t:"تحديث المواد", p:"الموضوعات المعتمدة تصبح دورات؛ والدروس المتأثرة تُنقّح حتى لا يبلى ما تدرّسه.", o:"الناتج ← مناهج محدّثة"},
+      {k:"المحطة ٤ · الإخراج", t:"توليد الحقائب", p:"الشرائح والاختبارات بمعاييرها والمطبوعات تُخرَج بهوية مساحة العمل، باللغتين.", o:"الناتج ← PPTX · DOCX · PDF · عربي"},
+      {k:"المحطة ٥ · المراجعة", t:"قائمتك الواحدة", p:"مجالات المراجعة أولاً تنتظر موافقتك. نقرة واحدة تعتمد موضوعاً وتطلق دورته تلقائياً.", o:"جهدك ← دقائق، لا أيام"},
+      {k:"المحطة ٦ · التعلّم", t:"ازدياد الذكاء", p:"تحريراتك وتقييماتك وملخصاتك تتحول إلى ذاكرة مهارات بإصدارات — ومسودات الأسبوع القادم ترث كل ما تعلمه المحرك.", o:"الناتج ← بريد استشاري + ذاكرة مهارات"}
+    ],
+    agents:[
+      ["٠١","الاستيعاب","أي رابط إلى مادة مصدرية نظيفة ومفهرسة ومقيّمة الجودة."],
+      ["٠٢","مهندس المجال","يبني تصنيف مجال جديد ومصادره وكتالوجه من جملة واحدة."],
+      ["٠٣","كشاف السوق","يمسح المجال أسبوعياً ويقدّم مقترحات مُقيَّمة."],
+      ["٠٤","كاتب الملخص","يحوّل النتائج إلى الملخص الأسبوعي مع إخلاءات المسؤولية."],
+      ["٠٥","مخطط المناهج","يصمم مسارات متعددة الجلسات وفق هرم بلوم."],
+      ["٠٦","صائغ الدروس","يكتب دليل المعلّم دقيقة بدقيقة وبصوتك أنت."],
+      ["٠٧","مولّد المواد","يُخرج الشرائح والاختبارات والمطبوعات بهوية العميل."],
+      ["٠٨","المُعرِّب","يكيّف كل شيء ثقافياً إلى عربية صحيحة الاتجاه."],
+      ["٠٩","المستشار","يلخص الأسبوع عبر المجالات في بريد واحد."],
+      ["١٠","محلل التغذية الراجعة","يحوّل ملاحظاتك إلى ذاكرة مهارات بإصدارات."]
+    ]
+  }
+};
+
+let lang = "en";
+const $ = (s)=>document.querySelector(s);
+const $$ = (s)=>[...document.querySelectorAll(s)];
+
+function applyLang(){
+  const d = I18N[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  $$("[data-i18n]").forEach(el=>{ const k=el.dataset.i18n; if(d[k]!=null) el.textContent=d[k]; });
+  $$("[data-i18n-html]").forEach(el=>{ const k=el.dataset.i18nHtml; if(d[k]!=null) el.innerHTML=d[k]; });
+  $("#langToggle").textContent = d.langBtn;
+  buildAgents(); buildDial(); showStage(activeStage);
+}
+
+function buildAgents(){
+  const host = $("#agents"); host.innerHTML = "";
+  I18N[lang].agents.forEach(([n,name,desc])=>{
+    const el = document.createElement("span");
+    el.className = "agent"; el.tabIndex = 0;
+    el.innerHTML = `<i>${n}</i>${name}<span class="tip">${desc}</span>`;
+    host.appendChild(el);
+  });
+}
+
+/* weekly cycle dial */
+let activeStage = 0, cycleTimer = null;
+function buildDial(){
+  const stages = I18N[lang].stages;
+  const cx=160, cy=160, r=118;
+  let svg = `<svg viewBox="0 0 320 320" role="group" aria-label="Weekly cycle">`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#3f3a36" stroke-width="1.5" stroke-dasharray="3 6"/>`;
+  svg += `<text x="${cx}" y="${cy-8}" text-anchor="middle" fill="#f59e0b" font-family="IBM Plex Mono,monospace" font-size="13">MON</text>`;
+  svg += `<text x="${cx}" y="${cy+14}" text-anchor="middle" fill="#8d867f" font-family="IBM Plex Mono,monospace" font-size="12">06:00</text>`;
+  stages.forEach((s,i)=>{
+    const a = -Math.PI/2 + i*(2*Math.PI/stages.length);
+    const x = cx + r*Math.cos(a), y = cy + r*Math.sin(a);
+    svg += `<g class="stopbtn${i===activeStage?" active":""}" data-i="${i}" role="button" tabindex="0" aria-label="${s.t}">
+      <circle class="halo" cx="${x}" cy="${y}" r="22" fill="transparent"/>
+      <circle class="dot" cx="${x}" cy="${y}" r="12" fill="${i===activeStage?"#f59e0b":"#57534e"}"/>
+      <text x="${x}" y="${y+4}" text-anchor="middle" fill="${i===activeStage?"#1c1917":"#d6d3d1"}" font-family="IBM Plex Mono,monospace" font-size="11">${i+1}</text>
+    </g>`;
+  });
+  svg += `</svg>`;
+  $("#dial").innerHTML = svg;
+  $$(".stopbtn").forEach(g=>{
+    const go = ()=>{ activeStage = +g.dataset.i; showStage(activeStage); buildDial(); restartCycle(); };
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  });
+}
+function showStage(i){
+  const s = I18N[lang].stages[i];
+  $("#stagePanel").innerHTML = `<div class="k">${s.k}</div><h3>${s.t}</h3><p>${s.p}</p><div class="out">${s.o}</div>`;
+}
+function restartCycle(){
+  clearInterval(cycleTimer);
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  cycleTimer = setInterval(()=>{ activeStage=(activeStage+1)%6; showStage(activeStage); buildDial(); }, 6000);
+}
+
+$("#langToggle").addEventListener("click", ()=>{ lang = lang==="en" ? "ar" : "en"; applyLang(); });
+
+/* scroll reveal */
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),{threshold:.12});
+$$(".reveal").forEach(el=>io.observe(el));
+
+applyLang();
+restartCycle();
+</script>
+</body>
+</html>

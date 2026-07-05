@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "one-pager",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8117", "--directory", "docs"],
+      "port": 8117
     }
   ]
 }
