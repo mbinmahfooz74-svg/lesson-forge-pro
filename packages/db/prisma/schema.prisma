@@ -71,6 +71,7 @@ model User {
   subscriptions Subscription[]
   entitlements  Entitlement[]
   events        Event[]
+  progress      SubscriberProgress[]
 }
 
 model FeatureFlag {
@@ -195,6 +196,7 @@ model CourseSession {
   durationMin Int           @default(90)
   createdAt   DateTime      @default(now())
   packs       MaterialPack[]
+  progress    SubscriberProgress[]
 
   @@unique([courseId, index])
 }
@@ -332,6 +334,17 @@ model Entitlement {
   createdAt  DateTime         @default(now())
 
   @@unique([userId, verticalId])
+}
+
+model SubscriberProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  sessionId   String
+  session     CourseSession @relation(fields: [sessionId], references: [id])
+  completedAt DateTime  @default(now())
+
+  @@unique([userId, sessionId])
 }
 
 model Event {

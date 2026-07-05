@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
-import { getSessionInfo } from "@/lib/authz";
+import { getSessionInfo, subscriberHome } from "@/lib/authz";
 import { draftSession, generateMaterials } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +12,7 @@ export default async function CourseDetail({ params }: { params: Promise<{ local
   const t = getDictionary(locale);
   const s = await getSessionInfo();
   if (!s) return null;
+  subscriberHome(s, locale);
   const course = await prisma.course.findUnique({
     where: { id },
     include: { vertical: true, sessions: { orderBy: { index: "asc" }, include: { packs: true } } },

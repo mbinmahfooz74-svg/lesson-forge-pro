@@ -1,6 +1,6 @@
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
-import { getSessionInfo, tenantWhere } from "@/lib/authz";
+import { getSessionInfo, tenantWhere, subscriberHome } from "@/lib/authz";
 import { triggerWeeklyCycle } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -10,6 +10,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const t = getDictionary(locale);
   const s = await getSessionInfo();
   if (!s) return null;
+  subscriberHome(s, locale);
   const isOwner = s.role === "OWNER";
 
   const [verticalCount, pendingProposals, events, advisoryEvent] = await Promise.all([

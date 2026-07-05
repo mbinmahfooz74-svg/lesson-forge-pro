@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
-import { getSessionInfo } from "@/lib/authz";
+import { getSessionInfo, subscriberHome } from "@/lib/authz";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +14,7 @@ export default async function VerticalDetail({ params }: { params: Promise<{ loc
   const t = getDictionary(locale);
   const s = await getSessionInfo();
   if (!s) return null;
+  subscriberHome(s, locale);
   const v = await prisma.vertical.findUnique({ where: { id } });
   if (!v || (s.role !== "OWNER" && v.tenantId !== s.tenantId)) notFound();
   const proposals = await prisma.proposal.findMany({

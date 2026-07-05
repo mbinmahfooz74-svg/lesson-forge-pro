@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
-import { getSessionInfo, tenantWhere } from "@/lib/authz";
+import { getSessionInfo, tenantWhere, subscriberHome } from "@/lib/authz";
 import { planCourse } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +11,7 @@ export default async function CoursesPage({ params }: { params: Promise<{ locale
   const t = getDictionary(locale);
   const s = await getSessionInfo();
   if (!s) return null;
+  subscriberHome(s, locale);
   const [courses, verticals] = await Promise.all([
     prisma.course.findMany({
       where: { vertical: { ...tenantWhere(s), slug: { not: "eval-harness" } } },

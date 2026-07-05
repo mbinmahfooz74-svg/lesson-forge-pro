@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
-import { getSessionInfo, tenantWhere } from "@/lib/authz";
+import { getSessionInfo, tenantWhere, subscriberHome } from "@/lib/authz";
 import AutoRefresh from "@/components/AutoRefresh";
 import { addSource, retrySource } from "./actions";
 
@@ -20,6 +20,7 @@ export default async function SourcesPage({ params }: { params: Promise<{ locale
   const t = getDictionary(locale);
   const s = await getSessionInfo();
   if (!s) return null;
+  subscriberHome(s, locale);
   const [sources, verticals] = await Promise.all([
     prisma.source.findMany({
       where: { vertical: tenantWhere(s) },

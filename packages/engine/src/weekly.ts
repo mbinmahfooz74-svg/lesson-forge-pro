@@ -1,5 +1,6 @@
 import { prisma } from "@lessonforge/db";
 import { registry } from "./agents/index.js";
+import { sendSubscriberDigests } from "./digest.js";
 
 /**
  * Runs one full weekly cycle: for each ACTIVE vertical, scout the field then write the
@@ -21,6 +22,9 @@ export async function runWeeklyCycle(): Promise<{ verticals: number; summary: st
   const advisory = await registry["advisor"]({ agent: "advisor", tenantId: owner!.id });
   summary.push(advisory.summary);
 
-  await prisma.event.create({ data: { type: "weekly.cycle.completed", payload: { verticals: verticals.length } } });
+  const digests = await sendSubscriberDigests();
+  summary.push(digests.skipped ? `digests: skipped (${digests.skipped})` : `digests: emailed ${digests.sent} subscriber(s)`);
+
+  await prisma.event.create({ data: { type: "weekly.cycle.completed", payload: { verticals: verticals.length, digestsSent: digests.sent } } });
   return { verticals: verticals.length, summary };
 }

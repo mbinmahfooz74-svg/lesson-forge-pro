@@ -16,21 +16,29 @@ export default async function DashboardLayout({
   if (!session?.user) redirect(`/${locale}/login`);
   const role = (session.user as { role?: string }).role;
 
-  const nav = [
-    { href: `/${locale}`, label: t.nav.briefing },
-    { href: `/${locale}/verticals`, label: t.nav.verticals },
-    { href: `/${locale}/sources`, label: t.nav.sources },
-    { href: `/${locale}/courses`, label: t.nav.courses },
-    { href: `/${locale}/feedback`, label: t.nav.feedback },
-    { href: `/${locale}/review`, label: t.nav.review },
-    ...(role === "TENANT_ADMIN" ? [{ href: `/${locale}/workspace`, label: t.nav.workspace }] : []),
-    ...(role === "OWNER"
+  const nav =
+    role === "SUBSCRIBER"
       ? [
-          { href: `/${locale}/tenants`, label: t.nav.tenants },
-          { href: `/${locale}/settings`, label: t.nav.settings },
+          { href: `/${locale}/briefings`, label: t.navSub.briefings },
+          { href: `/${locale}/library`, label: t.navSub.library },
         ]
-      : []),
-  ];
+      : [
+          { href: `/${locale}`, label: t.nav.briefing },
+          { href: `/${locale}/verticals`, label: t.nav.verticals },
+          { href: `/${locale}/sources`, label: t.nav.sources },
+          { href: `/${locale}/courses`, label: t.nav.courses },
+          { href: `/${locale}/briefings`, label: t.navSub.briefings },
+          { href: `/${locale}/feedback`, label: t.nav.feedback },
+          { href: `/${locale}/review`, label: t.nav.review },
+          ...(role === "TENANT_ADMIN" ? [{ href: `/${locale}/workspace`, label: t.nav.workspace }] : []),
+          ...(role === "OWNER"
+            ? [
+                { href: `/${locale}/subscribers`, label: t.subscribers.title },
+                { href: `/${locale}/tenants`, label: t.nav.tenants },
+                { href: `/${locale}/settings`, label: t.nav.settings },
+              ]
+            : []),
+        ];
 
   async function doSignOut() {
     "use server";

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
-import { getSessionInfo, tenantWhere } from "@/lib/authz";
+import { getSessionInfo, tenantWhere, subscriberHome } from "@/lib/authz";
 import AutoRefresh from "@/components/AutoRefresh";
 import { createVertical, buildVertical } from "./actions";
 
@@ -12,6 +12,7 @@ export default async function VerticalsPage({ params }: { params: Promise<{ loca
   const t = getDictionary(locale);
   const s = await getSessionInfo();
   if (!s) return null;
+  subscriberHome(s, locale);
   const verticals = await prisma.vertical.findMany({
     where: { ...tenantWhere(s), slug: { not: "eval-harness" } },
     orderBy: { createdAt: "asc" },

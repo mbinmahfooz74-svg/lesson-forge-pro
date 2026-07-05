@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 
 export interface SessionInfo {
@@ -59,4 +60,9 @@ export async function getSessionInfo(): Promise<SessionInfo | null> {
 /** Prisma where-fragment for tenant isolation: OWNER is platform admin and sees all. */
 export function tenantWhere(s: SessionInfo): { tenantId?: string } {
   return s.role === "OWNER" ? {} : { tenantId: s.tenantId };
+}
+
+/** Staff-only pages call this: subscribers are routed to their portal home. */
+export function subscriberHome(s: SessionInfo, locale: string): void {
+  if (s.role === "SUBSCRIBER") redirect(`/${locale}/briefings`);
 }

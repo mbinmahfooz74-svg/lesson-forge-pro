@@ -1,6 +1,6 @@
 import { prisma } from "@lessonforge/db";
 import { getDictionary } from "@/dictionaries";
-import { getSessionInfo, tenantWhere } from "@/lib/authz";
+import { getSessionInfo, tenantWhere, subscriberHome } from "@/lib/authz";
 import { submitFeedback } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -10,6 +10,7 @@ export default async function FeedbackPage({ params }: { params: Promise<{ local
   const t = getDictionary(locale);
   const s = await getSessionInfo();
   if (!s) return null;
+  subscriberHome(s, locale);
   const verticals = await prisma.vertical.findMany({
     where: { ...tenantWhere(s), slug: { not: "eval-harness" } },
     orderBy: { createdAt: "asc" },

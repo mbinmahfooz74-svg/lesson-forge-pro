@@ -31,6 +31,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     return NextResponse.json({ error: "not found" }, { status: 404 });
   }
 
+  // Subscribers additionally need a FULL entitlement on the pack's vertical.
+  if (u.role === "SUBSCRIBER") {
+    const verticalId = pack.session?.course.verticalId ?? pack.briefing?.verticalId ?? null;
+    const userId = (session.user as { id?: string }).id ?? "";
+    const ent = verticalId
+      ? await prisma.entitlement.findUnique({ where: { userId_verticalId: { userId, verticalId } } })
+      : null;
+    if (ent?.level !== "FULL") return NextResponse.json({ error: "not found" }, { status: 404 });
+  }
+
   try {
     const data = await fs.readFile(pack.storagePath);
     const ext = path.extname(pack.storagePath);
