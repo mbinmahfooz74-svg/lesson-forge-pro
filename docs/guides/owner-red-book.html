@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson Forge Pro — Owner's Red Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1c1917;--paper:#f5f5f4;--card:#fff;--line:#e7e5e4;--amber:#b45309;--amber-soft:#fef3c7;--teal:#0e7490;--mut:#78716c;--red:#991b1b;
+    --disp:"Bitter",Georgia,serif;--body:"IBM Plex Sans","Segoe UI",sans-serif;--mono:"IBM Plex Mono",Consolas,monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.7}
+  .shell{display:grid;grid-template-columns:250px 1fr;max-width:1180px;margin:0 auto;gap:0}
+  nav.toc{position:sticky;top:0;height:100vh;overflow-y:auto;padding:28px 20px;border-inline-end:1px solid var(--line)}
+  nav.toc .mark{font-family:var(--disp);font-weight:800;font-size:15px;margin-bottom:4px}
+  nav.toc .sub{font-family:var(--mono);font-size:10.5px;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px}
+  nav.toc a{display:block;padding:5px 0;font-size:13px;color:#57534e;text-decoration:none;border-inline-start:2px solid transparent;padding-inline-start:10px;margin-inline-start:-10px}
+  nav.toc a:hover{color:var(--amber)}
+  main{padding:40px 48px 90px;max-width:820px}
+  h1{font-family:var(--disp);font-size:34px;font-weight:800;line-height:1.2}
+  h2{font-family:var(--disp);font-size:23px;font-weight:800;margin:52px 0 14px;padding-top:14px;border-top:3px solid var(--red)}
+  h3{font-family:var(--disp);font-size:16.5px;font-weight:700;margin:26px 0 8px}
+  p{margin:10px 0}
+  .redband{background:var(--red);color:#fff;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;display:inline-block;padding:4px 12px;border-radius:4px;margin-bottom:14px}
+  .lede{color:#57534e;font-size:16.5px;max-width:40em}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 12px;text-align:start;vertical-align:top}
+  th{background:#fafaf9;font-weight:600}
+  code,kbd{font-family:var(--mono);font-size:12.5px;background:#eeedec;border-radius:4px;padding:1.5px 6px}
+  pre{background:#211d1a;color:#e7e5e4;font-family:var(--mono);font-size:12.5px;line-height:1.65;padding:14px 16px;border-radius:10px;overflow-x:auto;margin:12px 0}
+  pre .c{color:#8d867f}
+  .note,.warn,.launch{border-radius:10px;padding:12px 16px;margin:14px 0;font-size:14px}
+  .note{background:var(--amber-soft);border:1px solid #fcd34d}
+  .warn{background:#fee2e2;border:1px solid #fca5a5}
+  .launch{background:#cffafe;border:1px solid #67e8f9}
+  .note b:first-child,.warn b:first-child,.launch b:first-child{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px}
+  ol,ul{padding-inline-start:22px;margin:10px 0}
+  li{margin:5px 0}
+  .path{font-family:var(--mono);font-size:12px;color:var(--teal)}
+  @media(max-width:900px){.shell{grid-template-columns:1fr}nav.toc{position:static;height:auto;border:0;border-bottom:1px solid var(--line)}main{padding:28px 22px 70px}}
+  @media print{nav.toc{display:none}.shell{grid-template-columns:1fr}body{font-size:12px}pre{white-space:pre-wrap}}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="toc">
+  <div class="mark">Lesson Forge Pro</div>
+  <div class="sub">Owner's Red Book</div>
+  <a href="#map">1 · What you own</a>
+  <a href="#rhythm">2 · Your weekly rhythm</a>
+  <a href="#screens">3 · Screen-by-screen</a>
+  <a href="#lifecycle">4 · Content lifecycle</a>
+  <a href="#review">5 · Review queue & autonomy</a>
+  <a href="#subs">6 · Subscribers & entitlements</a>
+  <a href="#tenants">7 · B2B workspaces</a>
+  <a href="#engine">8 · The engine room</a>
+  <a href="#keys">9 · Keys & providers</a>
+  <a href="#trouble">10 · Troubleshooting</a>
+  <a href="#launch">11 · Launch checklist</a>
+  <a href="#creds">12 · Accounts appendix</a>
+</nav>
+<main>
+  <span class="redband">Red book · owner / platform admin · confidential</span>
+  <h1>The Owner's Red Book</h1>
+  <p class="lede">Everything you need to operate Lesson Forge Pro: the daily workflows, every screen, the engine runbook, and what to do when something breaks. Written against the current test setup (local machine, Groq + Resend keys); <span class="path">At launch</span> boxes mark what changes in production.</p>
+
+  <h2 id="map">1 · What you own</h2>
+  <p>Lesson Forge Pro is an autonomous education-intelligence platform with three surfaces on one engine:</p>
+  <table>
+    <tr><th>Surface</th><th>Who uses it</th><th>Where</th></tr>
+    <tr><td><b>Ops Studio</b> (yours)</td><td>You — platform owner</td><td><span class="path">localhost:3000/en</span> (or <span class="path">/ar</span>)</td></tr>
+    <tr><td><b>Subscriber portal</b></td><td>Individual customers</td><td>Same login page; subscribers see only Briefings + Library</td></tr>
+    <tr><td><b>Tenant workspaces</b></td><td>B2B client companies</td><td>Same app; each company sees only its own isolated workspace</td></tr>
+  </table>
+  <p>Under the hood, ten agents do the work. You never call them directly — they run from the queue, the weekly cron, and the buttons in your UI:</p>
+  <table>
+    <tr><th>Agent</th><th>What it does</th></tr>
+    <tr><td>Ingestion</td><td>Any URL (web / YouTube / PDF) → clean, quality-scored, searchable source material</td></tr>
+    <tr><td>Vertical Architect</td><td>One-sentence field description → taxonomy, source map, EN/AR glossary, course catalog</td></tr>
+    <tr><td>Market Scout</td><td>Weekly field scan (news + web) → classified proposals with significance scores</td></tr>
+    <tr><td>Briefing Writer</td><td>Scout findings → weekly briefing; Investment briefings carry the locked disclaimer</td></tr>
+    <tr><td>Curriculum Planner</td><td>Topic → multi-session arc with Bloom's objectives and prerequisites</td></tr>
+    <tr><td>Lesson Drafter</td><td>Session → minute-by-minute educator guide, in your learned voice</td></tr>
+    <tr><td>Materials Generator</td><td>Session → branded PPTX + assessment/rubric DOCX + handout DOCX/PDF</td></tr>
+    <tr><td>Localizer</td><td>Culturally adapted Arabic editions, RTL-correct documents</td></tr>
+    <tr><td>Advisor</td><td>Weekly cross-vertical synthesis → your Monday advisory email with AI-spend estimate</td></tr>
+    <tr><td>Feedback Analyzer</td><td>Your transcripts / ratings / debriefs → versioned skill memory (the learning loop)</td></tr>
+  </table>
+
+  <h2 id="rhythm">2 · Your weekly rhythm</h2>
+  <p>The platform is designed so your steady-state effort is <b>read one email, clear one queue</b>.</p>
+  <h3>Monday (~20 minutes)</h3>
+  <ol>
+    <li><b>Read the advisory email</b> (also shown on your dashboard home). It tells you what the scout found, what was drafted, what's waiting for you, and the estimated AI spend.</li>
+    <li><b>Open the Review queue.</b> Approve the weekly briefings you're happy with (approval publishes them to subscribers), reject noise, and approve any new-topic proposals worth teaching — <b>approving a topic automatically plans its course</b>.</li>
+    <li>Spot-check one generated pack if content changed significantly.</li>
+  </ol>
+  <h3>After teaching a session (~5 minutes)</h3>
+  <p>Go to <b>Feedback</b>, pick the vertical, paste your session transcript and/or debrief notes. The Feedback Analyzer distills them into skill memory — next week's drafts inherit what it learned. Every learning step is versioned and visible on the same page.</p>
+  <h3>Anytime</h3>
+  <ul>
+    <li>Drop URLs into the <b>Source pipeline</b> when you find good material — everything downstream gets smarter.</li>
+    <li>Press <b>Run weekly cycle</b> on the dashboard if you don't want to wait for Monday 06:00 UTC.</li>
+  </ul>
+
+  <h2 id="screens">3 · Screen-by-screen reference</h2>
+  <table>
+    <tr><th>Screen</th><th>What it's for</th><th>Key actions</th></tr>
+    <tr><td><b>Command briefing</b> <span class="path">/en</span></td><td>Home: counts, engine events, latest advisory</td><td>Run weekly cycle</td></tr>
+    <tr><td><b>Verticals</b> <span class="path">/en/verticals</span></td><td>Your fields of interest</td><td>Create a vertical (one sentence → the Architect self-builds it); open one to see taxonomy, proposed courses, EN/AR glossary</td></tr>
+    <tr><td><b>Source pipeline</b> <span class="path">/en/sources</span></td><td>Feed the engine raw material</td><td>Paste any URL + pick vertical → Ingest; watch live status; Retry failures; View extracted text with quality score</td></tr>
+    <tr><td><b>Courses</b> <span class="path">/en/courses</span></td><td>Plan and produce training</td><td>Plan a course from a topic; per session: Draft (educator guide), Generate materials (4-file pack), Redraft</td></tr>
+    <tr><td><b>Briefings</b> <span class="path">/en/briefings</span></td><td>Published weekly briefings (what subscribers see)</td><td>Read-only feed</td></tr>
+    <tr><td><b>Feedback</b> <span class="path">/en/feedback</span></td><td>The learning loop</td><td>Submit transcript / ratings / debrief per vertical; inspect versioned skill memory</td></tr>
+    <tr><td><b>Review queue</b> <span class="path">/en/review</span></td><td>Everything awaiting your judgment</td><td>Approve / Reject proposals and briefings (sorted by significance)</td></tr>
+    <tr><td><b>Subscribers</b> <span class="path">/en/subscribers</span></td><td>Customer admin</td><td>Counts; per-vertical FULL ⇄ PREVIEW toggle per subscriber (see §6)</td></tr>
+    <tr><td><b>Tenants</b> <span class="path">/en/tenants</span></td><td>B2B workspace admin</td><td>List of client workspaces with users/verticals/seats</td></tr>
+    <tr><td><b>Settings</b> <span class="path">/en/settings</span></td><td>Feature flags</td><td>View stage flags (<code>subscribers_enabled</code>, <code>b2b_enabled</code>)</td></tr>
+  </table>
+  <p>Add <span class="path">/ar</span> instead of <span class="path">/en</span> anywhere for the Arabic RTL interface.</p>
+
+  <h2 id="lifecycle">4 · The content lifecycle</h2>
+  <ol>
+    <li><b>Vertical</b> — create it with a name + one sentence. The Architect builds taxonomy, glossary, search queries, and files 6–8 course proposals into your Review queue.</li>
+    <li><b>Sources</b> — drop URLs. The quality gate scores each capture; weak ones are flagged, never silently indexed.</li>
+    <li><b>Course</b> — plan from any topic (or approve an Architect/Scout proposal). You get a multi-session arc with Bloom's-mapped objectives.</li>
+    <li><b>Draft</b> — per session, the Drafter writes the minute-by-minute educator guide, grounded in your ingested sources and your skill memory.</li>
+    <li><b>Materials</b> — one click renders the pack: slides (PPTX), assessment + rubric (DOCX), learner handout (DOCX + PDF). Tenant packs carry the tenant's branding. Arabic editions come from the Localizer.</li>
+    <li><b>Publish</b> — sessions with materials are PUBLISHED and appear in the subscriber Library; approved briefings appear in the Briefings feed and go out in digests.</li>
+    <li><b>Learn</b> — your feedback updates skill memory; the next cycle drafts closer to your voice.</li>
+  </ol>
+
+  <h2 id="review">5 · Review queue & the autonomy dial</h2>
+  <p>Every vertical has an autonomy setting:</p>
+  <table>
+    <tr><th>Mode</th><th>Behavior</th></tr>
+    <tr><td><b>Review-first</b> (default)</td><td>Briefings and proposals wait in your Review queue. Nothing reaches subscribers without your click.</td></tr>
+    <tr><td><b>Full-auto</b></td><td>The cycle publishes briefings directly; you see what happened in the advisory. Graduate a vertical here once you trust its output.</td></tr>
+  </table>
+  <div class="warn"><b>Locked rule — Investment</b>The Investment vertical is compliance-locked: review-first, and every briefing/course carries the "educational, not financial advice" disclaimer in both languages. The Briefing Writer is constrained against personalized buy/sell recommendations. Don't relax this without a compliance review.</div>
+  <div class="note"><b>Current limitation</b>There's no UI toggle for the autonomy dial yet — all verticals run review-first. Flipping one to full-auto is a one-line database change; ask for it when a vertical has earned trust.</div>
+  <p>Approval semantics: approving a <b>BRIEFING</b> publishes it. Approving a <b>NEW_TOPIC</b> automatically starts the Curriculum Planner on it. Rejections teach the scout what you consider noise (via your feedback loop).</p>
+
+  <h2 id="subs">6 · Subscribers & entitlements (manual billing bridge)</h2>
+  <p>Stripe is not wired yet — <b>you are the billing system</b> until launch:</p>
+  <ol>
+    <li>Customers sign up free at <span class="path">/en/subscribe</span> (works because <code>subscribers_enabled</code> is ON). They automatically get <b>PREVIEW</b> on every active vertical: truncated briefings, course plans visible, no downloads.</li>
+    <li>When someone pays you (bank transfer, invoice — whatever you agree), open <b>Subscribers</b> and click the vertical chip on their row to flip it to <b>FULL</b>: complete briefings, full educator guides, all pack downloads, full digest emails.</li>
+    <li>Click again to send them back to PREVIEW (non-payment, refund).</li>
+  </ol>
+  <div class="launch"><b>At launch</b>Stripe replaces your clicks: per-vertical monthly plans + the premium Investment plan drive the same Entitlement records automatically. Nothing else changes — the portal, gating, and digests already enforce entitlements.</div>
+  <div class="note"><b>Digest emails</b>Resend is in test mode: it only delivers to your own address (mbinmahfooz74@gmail.com) until you verify a sending domain. Digest attempts to other addresses are recorded per-subscriber in the event log with the exact reason.</div>
+
+  <h2 id="tenants">7 · B2B workspaces (your GCC pilots)</h2>
+  <p>A workspace is a company's private Lesson Forge: their own verticals, sources, courses, and packs — <b>branded with their name and color</b> — fully isolated from you and from other tenants.</p>
+  <h3>Onboarding a pilot company</h3>
+  <ol>
+    <li>Send them <span class="path">/en/workspace/new</span> (works because <code>b2b_enabled</code> is ON). They enter company name, admin name/email, password.</li>
+    <li>Their admin invites colleagues from their <b>Workspace</b> page — invite emails carry an accept link; seat limits are enforced (default 5).</li>
+    <li>They create their own vertical (self-builds like yours), add sources, plan courses, and generate <b>packs carrying their branding</b>.</li>
+    <li>You watch it all from <b>Tenants</b>: users, verticals, seats per workspace.</li>
+  </ol>
+  <div class="note"><b>Current limitations</b>Tenant brand color and seat limit have no UI yet — they're set in the database (the Falcon demo tenant uses teal #0E7490, 3 seats). Ask and I'll change them, or a settings UI can be added. Workspace billing is manual/invoice for pilots.</div>
+  <p>As platform owner you can see every tenant's data (support access). Tenants can never see yours or each other's — enforced on every page, action, and file download.</p>
+
+  <h2 id="engine">8 · The engine room (runbook)</h2>
+  <h3>Start / restart</h3>
+  <pre><span class="c"># 1. database (skip if `docker ps` shows lessonforge-db)</span>
+npm run db:up
+
+<span class="c"># 2. engine worker — Git Bash (sources your API keys, then starts)</span>
+set -a && source .env && set +a && npm run dev:worker
+
+<span class="c"># 3. web app — second terminal</span>
+npm run dev</pre>
+  <p>Worker is healthy when it prints: <code>Queues: ping, agent.run, source.ingest, weekly.cycle (cron Mon 06:00 UTC)</code>. Restart the worker (Ctrl+C, rerun) after any <code>.env</code> change — it hot-reloads code but not environment variables.</p>
+  <h3>Health checks</h3>
+  <pre><span class="c"># queue round-trip (worker must be running)</span>
+npm run ping --workspace=packages/engine
+
+<span class="c"># run any agent by hand</span>
+npm run agent --workspace=packages/engine -- curriculum-planner ai-emerging-tech '{"title":"Prompt engineering","sessions":4}'</pre>
+  <h3>Quality gate (run before shipping any engine change)</h3>
+  <pre>npm run eval --workspace=packages/engine</pre>
+  <p>Five golden topics are planned + drafted and scored on a structural rubric. Fails below 0.60 or on a &gt;0.10 drop vs the last run <i>from the same provider</i> (Groq baseline: 0.899). CI runs this on every push too.</p>
+  <h3>Backups</h3>
+  <pre>npm run db:backup   <span class="c"># timestamped pg_dump into backups/, keeps latest 14</span></pre>
+  <div class="warn"><b>Do this weekly</b>Backups are manual right now. One Docker-volume loss erases everything. Friday backup, always.</div>
+
+  <h2 id="keys">9 · Keys & providers (test → launch)</h2>
+  <p>All providers auto-resolve from <code>.env</code> — swapping keys changes behavior with zero code changes:</p>
+  <table>
+    <tr><th>Capability</th><th>Resolution order</th><th>Today</th></tr>
+    <tr><td>Reasoning / drafting</td><td>Anthropic Claude → Groq → OpenAI → offline fallback</td><td><b>Groq</b> llama-3.3-70b (free tier)</td></tr>
+    <tr><td>Field scanning</td><td>Tavily → Brave → Google News RSS</td><td><b>RSS</b> (keyless, real headlines)</td></tr>
+    <tr><td>Semantic retrieval</td><td>OpenAI embeddings → hash fallback</td><td><b>Hash</b> (offline; weaker matching)</td></tr>
+    <tr><td>Email</td><td>Resend</td><td><b>Test mode</b> (your address only)</td></tr>
+  </table>
+  <div class="launch"><b>At launch — paste into .env and restart the worker</b><code>ANTHROPIC_API_KEY</code> (primary reasoning — noticeably better Arabic and pedagogy), <code>OPENAI_API_KEY</code> (fallback + real embeddings — then re-ingest sources), <code>TAVILY_API_KEY</code> (premium search), verified domain in Resend + <code>EMAIL_FROM</code>. The eval harness starts a fresh baseline per provider automatically.</div>
+  <div class="warn"><b>Rotate the test keys</b>The current Groq and Resend keys were shared in chat during setup. Fine for testing; generate fresh ones before launch.</div>
+
+  <h2 id="trouble">10 · Troubleshooting</h2>
+  <table>
+    <tr><th>Symptom</th><th>Fix</th></tr>
+    <tr><td>Docker Desktop won't start (known issue on this machine)</td><td>PowerShell: kill Docker processes → <code>Rename-Item "$env:LOCALAPPDATA\Docker\run" "run_stale_$(Get-Random)"</code> → relaunch Docker Desktop, wait 2–3 min. Root cause (Docker AI socket) is already disabled in settings.</td></tr>
+    <tr><td>Agent output says <code>[fallback]</code></td><td>The worker has no LLM key in its environment. Restart it with the <code>.env</code> sourcing line from §8.</td></tr>
+    <tr><td>Sources stuck in QUEUED</td><td>Worker isn't running or crashed — restart it; jobs resume automatically from the queue.</td></tr>
+    <tr><td>Source FAILED</td><td>Open it — the error lists every extraction method tried. Paywalled/blocked pages sometimes work via a different URL of the same content. Retry button re-queues.</td></tr>
+    <tr><td>Digest "not sent"</td><td>Resend test-mode restriction (§6) or missing key — the per-subscriber event records the exact reason.</td></tr>
+    <tr><td>Groq rate-limit warnings in worker log</td><td>Normal on free tier — the engine waits 20s and retries once, then falls back gracefully. Heavy testing days may hit it more often.</td></tr>
+    <tr><td>Login works but session drops immediately</td><td>Only affects http through certain proxies — use <span class="path">http://localhost:3000</span> directly in your own browser.</td></tr>
+  </table>
+
+  <h2 id="launch">11 · Launch checklist</h2>
+  <ol>
+    <li>☐ Change the owner password (current default is a placeholder — §12).</li>
+    <li>☐ Rotate Groq/Resend keys; add Anthropic, OpenAI, Tavily keys.</li>
+    <li>☐ Verify a sending domain in Resend; set <code>EMAIL_FROM</code>.</li>
+    <li>☐ Cloud deploy: Vercel (web) + Neon/Supabase Postgres with pgvector + worker host (Railway/Fly). Set the same <code>.env</code> there. No code changes.</li>
+    <li>☐ Re-ingest sources after enabling OpenAI embeddings.</li>
+    <li>☐ Stripe: per-vertical plans + premium Investment plan → replaces manual entitlements.</li>
+    <li>☐ ToS / privacy / disclaimer pages (EN/AR); password-change and reset flows.</li>
+    <li>☐ Security pass: rate limiting, DB-level RLS, monitoring (Sentry).</li>
+    <li>☐ Two clean autonomous weekly cycles on Claude before inviting paying users.</li>
+  </ol>
+
+  <h2 id="creds">12 · Accounts appendix (test data, local machine)</h2>
+  <table>
+    <tr><th>Account</th><th>Login</th><th>Notes</th></tr>
+    <tr><td>Owner (you)</td><td>mbinmahfooz74@gmail.com / ChangeMe!2026</td><td><b>Change this password.</b></td></tr>
+    <tr><td>Test subscriber</td><td>mbinmahfooz74+subscriber@gmail.com / SubPass!2026</td><td>FULL on Finance & economy, PREVIEW on AI</td></tr>
+    <tr><td>Pilot tenant admin</td><td>pilot-admin@falcon-training.test / PilotPass!234</td><td>Falcon Training Co (teal, 3 seats)</td></tr>
+    <tr><td>Pilot tenant member</td><td>pilot-member@falcon-training.test / MemberPass!234</td><td>Same workspace, member role</td></tr>
+  </table>
+  <p style="margin-top:30px;color:var(--mut);font-size:12.5px;font-family:var(--mono)">Owner's Red Book · generated 2026-07-07 · keep confidential — contains operational credentials</p>
+</main>
+</div>
+</body>
+</html>
