@@ -1,0 +1,80 @@
+[
+  {
+    "day": 1,
+    "title": "Introduction to Financial Modeling",
+    "minutes": 90,
+    "files": [
+      "day1-slides.pptx",
+      "day1-assessment.docx",
+      "day1-handout.docx",
+      "day1-handout.pdf",
+      "day1-handout-ar.docx"
+    ]
+  },
+  {
+    "day": 2,
+    "title": "Financial Statement Forecasting and Analysis",
+    "minutes": 120,
+    "files": [
+      "day2-slides.pptx",
+      "day2-assessment.docx",
+      "day2-handout.docx",
+      "day2-handout.pdf"
+    ]
+  },
+  {
+    "day": 3,
+    "title": "Discounted Cash Flow (DCF) Valuation",
+    "minutes": 120,
+    "files": [
+      "day3-slides.pptx",
+      "day3-assessment.docx",
+      "day3-handout.docx",
+      "day3-handout.pdf"
+    ]
+  },
+  {
+    "day": 4,
+    "title": "Scenario Planning and Sensitivity Analysis",
+    "minutes": 90,
+    "files": [
+      "day4-slides.pptx",
+      "day4-assessment.docx",
+      "day4-handout.docx",
+      "day4-handout.pdf"
+    ]
+  },
+  {
+    "day": 5,
+    "title": "Financial Modeling for Mergers and Acquisitions (M&A) and Investment Decisions",
+    "minutes": 120,
+    "files": [
+      "day5-slides.pptx",
+      "day5-assessment.docx",
+      "day5-handout.docx",
+      "day5-handout.pdf"
+    ]
+  },
+  {
+    "day": 6,
+    "title": "Model Audit and Risk Management",
+    "minutes": 90,
+    "files": [
+      "day6-slides.pptx",
+      "day6-assessment.docx",
+      "day6-handout.docx",
+      "day6-handout.pdf"
+    ]
+  },
+  {
+    "day": 7,
+    "title": "Case Studies and Final Project Presentations",
+    "minutes": 180,
+    "files": [
+      "day7-slides.pptx",
+      "day7-assessment.docx",
+      "day7-handout.docx",
+      "day7-handout.pdf"
+    ]
+  }
+]
