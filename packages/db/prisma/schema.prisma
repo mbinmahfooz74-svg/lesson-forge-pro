@@ -193,6 +193,8 @@ model CourseSession {
   status      ContentStatus @default(DRAFT)
   planMd      String        @default("")
   guideMd     String        @default("")
+  textbookMd  String        @default("")
+  diagrams    Json?
   durationMin Int           @default(90)
   createdAt   DateTime      @default(now())
   packs       MaterialPack[]

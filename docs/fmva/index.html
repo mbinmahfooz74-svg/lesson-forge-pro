@@ -57,8 +57,9 @@
   <div id="days"></div>
 
   <footer>
-    Produced end-to-end by Lesson Forge Pro: curriculum planned, guides drafted, and all slide/assessment/handout packs
-    generated autonomously by the engine (Groq test tier) from six ingested public finance sources; Excel workbooks
+    Produced end-to-end by Lesson Forge Pro's Rich Materials Engine (Claude): self-study textbook chapters with worked
+    examples and practice sets, auto-designed vector infographics (flows, cycles, waterfalls) embedded in every format,
+    designed slide decks, and 10-question assessments — from six ingested public finance sources. Excel workbooks
     verified with zero formula errors (balance check = 0, DCF cross-checked against comps).<br>
     Lesson Forge Pro · Investment vertical premium sample · 2026
   </footer>
@@ -119,11 +120,11 @@ const host = document.getElementById("days");
 DAYS.forEach((d, i) => {
   const day = i + 1;
   const fileLinks = [
-    `<a href="packs/day${day}-slides.pptx">📽 slides</a>`,
-    `<a href="packs/day${day}-handout.pdf">📄 handout (pdf)</a>`,
-    `<a href="packs/day${day}-handout.docx">📝 handout (docx)</a>`,
-    `<a href="packs/day${day}-assessment.docx">🧪 assessment</a>`,
-    ...(day === 1 ? [`<a href="packs/day1-handout-ar.docx">🌙 handout (عربي)</a>`] : []),
+    `<a href="packs/day${day}-slides.pptx">📽 slides (with infographics)</a>`,
+    `<a href="packs/day${day}-handout.pdf">📚 textbook chapter (pdf)</a>`,
+    `<a href="packs/day${day}-handout.docx">📝 textbook chapter (docx)</a>`,
+    `<a href="packs/day${day}-assessment.docx">🧪 assessment (10 questions)</a>`,
+    ...(day === 1 ? [`<a href="packs/day1-handout-ar.docx">🌙 textbook (عربي)</a>`] : []),
   ].join("");
   const tasks = d.tasks.map((t, j) =>
     `<li><input type="checkbox" data-k="fmva-d${day}t${j}"><span class="slot">${t[0]}</span><span>${t[1]}</span></li>`).join("");
